@@ -1,8 +1,18 @@
+import type { Metadata } from "next";
 import { supabaseServer } from "@/lib/supabase/server";
 import { ADMIN_EMAIL } from "@/lib/types";
 import { redirect } from "next/navigation";
 import { signOut } from "@/app/actions/auth";
 import AdminShell from "./AdminShell";
+
+export const metadata: Metadata = {
+  title: "Admin",
+  robots: {
+    index: false,
+    follow: false,
+    googleBot: { index: false, follow: false },
+  },
+};
 
 export default async function AdminLayout({
   children,

@@ -7,6 +7,7 @@ import Reveal from "@/components/animations/Reveal";
 import { Stagger, StaggerItem } from "@/components/animations/Stagger";
 import HeroSlideshow from "@/components/animations/HeroSlideshow";
 import YouTubeEmbed from "@/components/YouTubeEmbed";
+import { CONTACT, SITE_DESCRIPTION, SITE_NAME, SITE_URL, SOCIAL } from "@/lib/site";
 
 const YOUTUBE_VIDEOS = [
   {
@@ -147,11 +148,86 @@ const GearIcon = ({ color = "#0f1410" }: { color?: string }) => (
   </svg>
 );
 
+const ORG_ID = `${SITE_URL}/#org`;
+
+const JSON_LD = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "EducationalOrganization",
+      "@id": ORG_ID,
+      name: SITE_NAME,
+      url: SITE_URL,
+      logo: `${SITE_URL}/icon.svg`,
+      image: `${SITE_URL}/opengraph-image`,
+      description: SITE_DESCRIPTION,
+      telephone: CONTACT.phoneFormatted,
+      foundingDate: "2014",
+      areaServed: { "@type": "Country", name: "India" },
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: CONTACT.city,
+        addressRegion: CONTACT.region,
+        addressCountry: CONTACT.country,
+      },
+      sameAs: [SOCIAL.instagram, SOCIAL.facebook],
+    },
+    {
+      "@type": "Course",
+      name: "4 Months Complete Bike Mechanic Course",
+      description:
+        "Comprehensive 4-month bike mechanic training covering live engines, BS3/BS4/BS6 wiring, customer bike workshop and EV training.",
+      provider: { "@id": ORG_ID },
+      inLanguage: ["en", "hi"],
+      educationalLevel: "Beginner",
+      occupationalCredentialAwarded: "Professional Bike Mechanic",
+      timeRequired: "P4M",
+      isAccessibleForFree: false,
+      offers: {
+        "@type": "Offer",
+        category: "Tuition",
+        priceCurrency: "INR",
+        availability: "https://schema.org/InStock",
+      },
+      hasCourseInstance: [
+        {
+          "@type": "CourseInstance",
+          courseMode: "in-person",
+          courseWorkload: "P4M",
+          location: {
+            "@type": "Place",
+            name: SITE_NAME,
+            address: {
+              "@type": "PostalAddress",
+              addressLocality: CONTACT.city,
+              addressRegion: CONTACT.region,
+              addressCountry: CONTACT.country,
+            },
+          },
+        },
+      ],
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${SITE_URL}/#website`,
+      url: SITE_URL,
+      name: SITE_NAME,
+      publisher: { "@id": ORG_ID },
+      inLanguage: ["en-IN", "hi-IN"],
+    },
+  ],
+};
+
 export default function HomePage() {
   const year = new Date().getFullYear();
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }}
+      />
       {/* ============== NAV ============== */}
       <Nav />
 
