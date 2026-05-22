@@ -103,7 +103,7 @@ export default function AppsDialog({ open, onClose }: Props) {
                   href={app.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex items-center gap-3 px-3 py-2.5 rounded-2xl hover:bg-cream transition"
+                  className="group flex items-center gap-3 px-3 py-2.5 rounded-2xl bg-cream/70 hover:bg-cream border border-line transition"
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
