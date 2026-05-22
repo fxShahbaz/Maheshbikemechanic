@@ -12,6 +12,8 @@ type HeroImage = {
   src: string;
   alt: string;
   objectPosition?: string;
+  objectPositionMobile?: string;
+  mobileScale?: number;
   objectFit?: "cover" | "contain";
 };
 
@@ -42,7 +44,15 @@ export default function HeroSlideshow({ images, interval = 5500 }: Props) {
   const current = images[index];
 
   return (
-    <div ref={ref} className="absolute inset-0 overflow-hidden">
+    <div
+      ref={ref}
+      className="absolute inset-0 overflow-hidden hero-mobile-zoom"
+      style={
+        {
+          ["--hero-mobile-scale" as string]: current.mobileScale ?? 1,
+        } as React.CSSProperties
+      }
+    >
       <AnimatePresence initial={false} mode="sync">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <motion.img
@@ -50,12 +60,24 @@ export default function HeroSlideshow({ images, interval = 5500 }: Props) {
           className="hero-img"
           src={current.src}
           alt={current.alt}
-          style={{
-            y,
-            scale,
-            objectFit: current.objectFit,
-            objectPosition: current.objectPosition,
-          }}
+          // First slide is the LCP candidate — load it eagerly with high priority.
+          // Subsequent slides cycle in well after first paint, so let them lazy-load.
+          loading={index === 0 ? "eager" : "lazy"}
+          fetchPriority={index === 0 ? "high" : "auto"}
+          decoding="async"
+          style={
+            {
+              y,
+              scale,
+              objectFit: current.objectFit,
+              ["--hero-obj-pos-desktop" as string]:
+                current.objectPosition ?? "center 15%",
+              ["--hero-obj-pos-mobile" as string]:
+                current.objectPositionMobile ??
+                current.objectPosition ??
+                "center 15%",
+            } as unknown as React.CSSProperties
+          }
           initial={{ opacity: 0 }}
           animate={{ opacity: 0.94 }}
           exit={{ opacity: 0 }}

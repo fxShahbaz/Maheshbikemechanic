@@ -270,10 +270,23 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center 15%;
+  /* Mobile-first: the inline CSS var falls back to "center 15%" */
+  object-position: var(--hero-obj-pos-mobile, center 15%);
   opacity: 0.92;
 }
+/* On mobile, optionally zoom the slideshow content (per-image via inline var).
+   transform-origin defaults to top so the zoomed image pushes DOWN — keeps
+   faces below the headline overlay. Override per-image with --hero-mobile-origin. */
+@media (max-width: 767px) {
+  .hero-mobile-zoom {
+    transform: scale(var(--hero-mobile-scale, 1));
+    transform-origin: var(--hero-mobile-origin, center top);
+  }
+}
 @media (min-width: 768px) {
+  .hero-img {
+    object-position: var(--hero-obj-pos-desktop, center 15%);
+  }
   .hero-img-wrap {
     min-height: 620px;
   }

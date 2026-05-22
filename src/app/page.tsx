@@ -183,6 +183,22 @@ const JSON_LD = {
       occupationalCredentialAwarded: "Professional Bike Mechanic",
       timeRequired: "P4M",
       isAccessibleForFree: false,
+      coursePrerequisites: "None — designed for freshers and beginners.",
+      educationalProgramMode: "full-time",
+      teaches: [
+        "Two-wheeler engine repair and rebuilding",
+        "BS3, BS4 and BS6 wiring and electronics",
+        "Carburettor tuning and fuel injection systems",
+        "Disc brake and hydraulic systems",
+        "Electric vehicle (EV) maintenance",
+        "Customer bike servicing on the workshop floor",
+      ],
+      audience: {
+        "@type": "EducationalAudience",
+        educationalRole: "student",
+        audienceType:
+          "Aspiring bike mechanics, freshers, and workshop owners upgrading skills",
+      },
       offers: {
         "@type": "Offer",
         category: "Tuition",
@@ -237,11 +253,19 @@ export default function HomePage() {
           <div className="hero-img-wrap">
             <HeroSlideshow
               images={[
-                { src: "/images/hero.png", alt: "Mahesh — founder of Mahesh Bike Institute" },
+                {
+                  src: "/images/hero.png",
+                  alt: "Mahesh — founder of Mahesh Bike Institute",
+                  // Mobile: anchor toward right so the face shifts left into frame
+                  objectPositionMobile: "78% center",
+                },
                 {
                   src: "/images/hero-classroom.jpg",
                   alt: "Classroom session at Mahesh Bike Institute — ECU sensors and actuators",
                   objectPosition: "center bottom",
+                  // Mobile: zoom in AND anchor the zoom to top so the student
+                  // slides downward (below the headline overlay)
+                  mobileScale: 1.5,
                 },
               ]}
             />
@@ -362,7 +386,10 @@ export default function HomePage() {
               <p className="text-muted mt-5 leading-relaxed max-w-[560px]">
                 At Mahesh Bike Institute we train freshers to become complete two-wheeler mechanics. Live engines, real wiring boards, customer bikes and BS6 / EV technology — every module is designed for the workshop floor, not the classroom.
               </p>
-              <p className="text-muted mt-3 hindi leading-relaxed max-w-[560px]">
+              <p
+                lang="hi"
+                className="text-muted mt-3 hindi leading-relaxed max-w-[560px]"
+              >
                 हम यहाँ ४ महीनों में आपको पूरा एक्सपर्ट बाइक मैकेनिक बनाते हैं — Hero, Honda, TVS, Yamaha, Suzuki, Royal Enfield, KTM और अन्य सभी ब्रांड्स की पूरी ट्रेनिंग के साथ।
               </p>
               <div className="mt-7 flex gap-3">
@@ -602,6 +629,8 @@ export default function HomePage() {
               <img
                 src="https://images.unsplash.com/photo-1547549082-6bc09f2049ae?auto=format&fit=crop&w=900&q=80"
                 alt="Motorcycle engine close-up"
+                loading="lazy"
+                decoding="async"
                 className="w-full h-full object-cover opacity-95"
               />
               <div className="absolute bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-ink/85 to-transparent">
@@ -629,8 +658,10 @@ export default function HomePage() {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="/images/customer-workshop.png"
-                alt="Mahesh Bike Institute customer workshop training"
-                className="w-full h-full object-cover object-center opacity-95"
+                alt="Students at Mahesh Bike Institute servicing real customer bikes in the workshop"
+                loading="lazy"
+                decoding="async"
+                className="w-full h-full object-cover object-top md:object-center opacity-95"
               />
               <div className="absolute bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-ink/95 via-ink/55 to-transparent">
                 <div className="text-lime text-xs uppercase tracking-wider">Customer Workshop</div>
@@ -951,11 +982,11 @@ export default function HomePage() {
                 </a>
               </div>
 
-              <div className="mt-8 pt-8 border-t border-line">
+              <address className="mt-8 pt-8 border-t border-line not-italic">
                 <div className="text-xs uppercase tracking-wider text-muted">Address</div>
                 <div className="font-display text-xl mt-2">Mahesh Bike Institute</div>
                 <div className="text-muted text-sm mt-1">Pune, Maharashtra, India</div>
-              </div>
+              </address>
             </div>
 
             <div className="bg-cream border border-line rounded-3xl p-7 md:p-9">

@@ -106,9 +106,15 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${inter.variable} ${fraunces.variable} ${devanagari.variable} antialiased`}
     >
-      <body>
+      <head>
+        <link rel="preconnect" href="https://i.ytimg.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://www.youtube.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://images.unsplash.com" />
+      </head>
+      <body suppressHydrationWarning>
         <RegisterSW />
         <GlobalClickSound />
         <GlobalTypingSound />
