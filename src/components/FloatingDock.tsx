@@ -9,6 +9,7 @@ import {
 import { useState } from "react";
 import EnrollButton from "./EnrollButton";
 import ChatPanel from "./ChatPanel";
+import AppsDialog from "./AppsDialog";
 
 const PHONE = "+917972024406";
 
@@ -16,6 +17,7 @@ export default function FloatingDock() {
   const { scrollY } = useScroll();
   const [visible, setVisible] = useState(true);
   const [chatOpen, setChatOpen] = useState(false);
+  const [appsOpen, setAppsOpen] = useState(false);
 
   useMotionValueEvent(scrollY, "change", (current) => {
     const previous = scrollY.getPrevious() ?? 0;
@@ -29,7 +31,7 @@ export default function FloatingDock() {
   return (
     <>
     <AnimatePresence>
-      {visible && (
+      {visible && !chatOpen && !appsOpen && (
         <motion.div
           initial={{ y: 96, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
@@ -98,9 +100,10 @@ export default function FloatingDock() {
               </span>
             </EnrollButton>
 
-            <a
-              href="/admin/login"
-              aria-label="Admin login"
+            <button
+              type="button"
+              onClick={() => setAppsOpen(true)}
+              aria-label="Download our apps"
               className="group inline-flex items-center gap-2 px-3.5 sm:px-4 py-3 sm:py-2.5 rounded-full text-white/90 hover:text-white hover:bg-white/10 transition text-sm font-medium"
             >
               <svg
@@ -112,17 +115,18 @@ export default function FloatingDock() {
                 strokeLinejoin="round"
                 className="w-[18px] h-[18px] sm:w-4 sm:h-4"
               >
-                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
-                <polyline points="10 17 15 12 10 7" />
-                <line x1="15" y1="12" x2="3" y2="12" />
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
               </svg>
-              <span className="hidden sm:inline">Login</span>
-            </a>
+              <span>Apps</span>
+            </button>
           </div>
         </motion.div>
       )}
     </AnimatePresence>
     <ChatPanel open={chatOpen} onClose={() => setChatOpen(false)} />
+    <AppsDialog open={appsOpen} onClose={() => setAppsOpen(false)} />
     </>
   );
 }
