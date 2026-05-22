@@ -80,7 +80,7 @@ export default function Nav() {
     >
       <motion.nav
         style={{ background, boxShadow: shadow }}
-        className="max-w-[1320px] mx-auto flex items-center justify-between backdrop-blur border border-line rounded-full pl-5 pr-2 py-2"
+        className="max-w-[1200px] mx-auto flex items-center justify-between backdrop-blur border border-line rounded-full pl-5 pr-2 py-2"
       >
         <a href="#" className="flex items-center gap-2 min-w-0">
           <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-lime shrink-0">

@@ -157,7 +157,7 @@ export default function HomePage() {
 
       {/* ============== HERO ============== */}
       <section className="px-4 md:px-8 mt-6">
-        <div className="max-w-[1320px] mx-auto">
+        <div className="max-w-[1200px] mx-auto">
           <div className="hero-img-wrap">
             <HeroSlideshow
               images={[
@@ -234,7 +234,7 @@ export default function HomePage() {
 
       {/* ============== ABOUT ============== */}
       <section id="about" className="px-4 md:px-8 mt-24">
-        <div className="max-w-[1320px] mx-auto">
+        <div className="max-w-[1200px] mx-auto">
           <div className="grid md:grid-cols-2 gap-10 md:gap-16">
             <div>
               <div className="section-tag">(About the Institute)</div>
@@ -305,7 +305,7 @@ export default function HomePage() {
 
       {/* ============== ENGINE VIDEO ============== */}
       <section className="px-4 md:px-8 mt-28">
-        <div className="max-w-[1320px] mx-auto">
+        <div className="max-w-[1200px] mx-auto">
           <Reveal>
             <div className="relative">
               <video
@@ -333,7 +333,7 @@ export default function HomePage() {
 
       {/* ============== MODULES ============== */}
       <section id="modules" className="px-4 md:px-8 mt-28">
-        <div className="max-w-[1320px] mx-auto">
+        <div className="max-w-[1200px] mx-auto">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
             <div>
               <div className="section-tag">(What You&apos;ll Learn)</div>
@@ -478,7 +478,7 @@ export default function HomePage() {
 
       {/* ============== WIRING GREEN BANNER ============== */}
       <section id="bikes" className="px-4 md:px-8 mt-28">
-        <div className="max-w-[1320px] mx-auto green-section p-8 md:p-14">
+        <div className="max-w-[1200px] mx-auto green-section p-8 md:p-14">
           <div className="grid md:grid-cols-2 gap-10 md:gap-16 items-end">
             <div>
               <div className="text-lime/80 text-sm tracking-wider uppercase">Module · Wiring</div>
@@ -505,7 +505,7 @@ export default function HomePage() {
 
       {/* ============== LIVE PARTS + ENGINE ============== */}
       <section className="px-4 md:px-8 mt-28">
-        <div className="max-w-[1320px] mx-auto">
+        <div className="max-w-[1200px] mx-auto">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
             <div>
               <div className="section-tag">(Hands-on Practice)</div>
@@ -567,7 +567,7 @@ export default function HomePage() {
 
       {/* ============== BS6 TECHNOLOGY ============== */}
       <section className="px-4 md:px-8 mt-28">
-        <div className="max-w-[1320px] mx-auto">
+        <div className="max-w-[1200px] mx-auto">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
             <div>
               <div className="section-tag">(Module · BS6)</div>
@@ -612,7 +612,7 @@ export default function HomePage() {
 
       {/* ============== EV TRAINING ============== */}
       <section className="px-4 md:px-8 mt-28">
-        <div className="max-w-[1320px] mx-auto">
+        <div className="max-w-[1200px] mx-auto">
           <div className="green-section p-8 md:p-14 grid md:grid-cols-2 gap-10 md:gap-16 items-center">
             <div>
               <div className="text-lime/80 text-sm tracking-wider uppercase">Module · Electric Vehicles</div>
@@ -651,7 +651,7 @@ export default function HomePage() {
 
       {/* ============== FEES + HOSTEL ============== */}
       <section id="fees" className="px-4 md:px-8 mt-28">
-        <div className="max-w-[1320px] mx-auto">
+        <div className="max-w-[1200px] mx-auto">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
             <div>
               <div className="section-tag">(Transparent Fees)</div>
@@ -728,7 +728,7 @@ export default function HomePage() {
 
       {/* ============== REVIEWS ============== */}
       <section id="reviews" className="px-4 md:px-8 mt-28">
-        <div className="max-w-[1320px] mx-auto">
+        <div className="max-w-[1200px] mx-auto">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
             <div>
               <div className="section-tag">(Student Reviews)</div>
@@ -770,7 +770,7 @@ export default function HomePage() {
 
       {/* ============== YOUTUBE VIDEOS ============== */}
       <section id="videos" className="px-4 md:px-8 mt-28">
-        <div className="max-w-[1320px] mx-auto">
+        <div className="max-w-[1200px] mx-auto">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
             <div>
               <div className="section-tag">(Latest Videos)</div>
@@ -835,7 +835,7 @@ export default function HomePage() {
 
       {/* ============== CONTACT ============== */}
       <section id="contact" className="px-4 md:px-8 mt-28">
-        <div className="max-w-[1320px] mx-auto">
+        <div className="max-w-[1200px] mx-auto">
           <div className="bg-white border border-line rounded-4xl p-8 md:p-14 grid md:grid-cols-2 gap-10 md:gap-16 items-center">
             <div>
               <div className="section-tag">(Start Your Career)</div>
@@ -892,7 +892,7 @@ export default function HomePage() {
 
       {/* ============== FOOTER ============== */}
       <footer className="px-4 md:px-8 mt-24 pb-24 md:pb-32">
-        <div className="max-w-[1320px] mx-auto">
+        <div className="max-w-[1200px] mx-auto">
           <div className="bg-ink text-white/85 rounded-4xl p-8 md:p-12">
             <div className="grid md:grid-cols-3 gap-10">
               <div>
