@@ -1,26 +1,349 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ---------- Tailwind v4 theme tokens (auto-generate utilities) ---------- */
+@theme {
+  --color-ink: #0f1410;
+  --color-cream: #f3f1ea;
+  --color-paper: #faf8f3;
+  --color-forest: #1c3a2e;
+  --color-moss: #2a5641;
+  --color-lime: #d4f548;
+  --color-lime-dk: #bce32a;
+  --color-muted: #6b7268;
+  --color-line: #e6e2d6;
+
+  --radius-4xl: 2rem;
+  --radius-5xl: 2.5rem;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-inter), var(--font-devanagari), system-ui, sans-serif;
+  --font-display: var(--font-fraunces), serif;
+  --font-hindi: var(--font-devanagari), var(--font-inter), sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ---------- Base ---------- */
+/* Lenis handles smooth scroll — disable the native one to avoid double-easing */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: clip;
+}
+
+/* Background scroll lock — toggled by any active popup / modal.
+   Note: deliberately NOT setting `touch-action: none` here — child modals
+   need to handle their own touch scrolling. Inner scrollable areas inside
+   modals should set `data-lenis-prevent` to keep Lenis from eating wheel
+   events. */
+html.no-scroll,
+body.no-scroll {
+  overflow: hidden !important;
+  overscroll-behavior: contain;
+}
+body {
+  background: #f3f1ea;
+  color: #0f1410;
+  font-family: var(--font-inter), var(--font-devanagari), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- Skeleton shimmer ---------- */
+@keyframes mbi-shimmer {
+  0% { background-position: -150% 0; }
+  100% { background-position: 150% 0; }
+}
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background-color: #e6e2d6;
+  background-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.6) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  background-repeat: no-repeat;
+  animation: mbi-shimmer 1.4s ease-in-out infinite;
+}
+.skeleton-dark {
+  background-color: #d8d4c6;
+}
+@media (prefers-reduced-motion: reduce) {
+  .skeleton { animation: none; }
+}
+
+/* ---------- Typography helpers ---------- */
+.display {
+  font-family: var(--font-fraunces), serif;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.02;
+}
+.display-tight {
+  font-family: var(--font-fraunces), serif;
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  line-height: 0.98;
+}
+.hindi {
+  font-family: var(--font-devanagari), var(--font-inter), sans-serif;
+}
+.label {
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+}
+.num-mono {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Buttons ---------- */
+.pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.85rem 1.35rem;
+  border-radius: 999px;
+  background: #d4f548;
+  color: #0f1410;
+  font-weight: 600;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+.pill-btn:hover {
+  background: #bce32a;
+  transform: translateY(-1px);
+}
+.pill-btn .arr {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: #0f1410;
+  color: #d4f548;
+}
+
+.ghost-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.85rem 1.35rem;
+  border-radius: 999px;
+  background: transparent;
+  color: #0f1410;
+  border: 1px solid #d6d1c1;
+  font-weight: 500;
+}
+.ghost-btn:hover {
+  background: #ffffff;
+}
+
+.social-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  background: #ffffff;
+  border: 1px solid #e6e2d6;
+  color: #0f1410;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+.social-btn:hover {
+  background: #0f1410;
+  color: #d4f548;
+  transform: translateY(-1px);
+}
+
+/* ---------- Nav ---------- */
+.nav-link {
+  font-size: 0.92rem;
+  color: #0f1410;
+  opacity: 0.85;
+}
+.nav-link:hover {
+  opacity: 1;
+}
+
+/* ---------- Sections ---------- */
+.section-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.82rem;
+  color: #5a6157;
+}
+.section-tag::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: #1c3a2e;
+}
+
+.feature-pill {
+  display: flex;
+  gap: 0.85rem;
+  align-items: flex-start;
+  padding: 1rem 1.1rem;
+  background: #ffffff;
+  border: 1px solid #ebe6d6;
+  border-radius: 18px;
+}
+
+.module-card {
+  background: #ffffff;
+  border: 1px solid #ebe6d6;
+  border-radius: 24px;
+  padding: 1.6rem;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.module-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px -18px rgba(15, 20, 16, 0.25);
+}
+
+.icon-box {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: #f3f1ea;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1c3a2e;
+}
+
+.bike-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.85rem;
+  border-radius: 999px;
+  background: #ffffff;
+  border: 1px solid #e6e2d6;
+  color: #0f1410;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+.green-section .bike-chip {
+  color: #1c3a2e;
+}
+
+.stat-card {
+  background: #ffffff;
+  border: 1px solid #ebe6d6;
+  border-radius: 20px;
+  padding: 1.1rem 1.2rem;
+}
+
+.green-section {
+  background: #1c3a2e;
+  color: #e9e6db;
+  border-radius: 32px;
+}
+.green-section .display {
+  color: #fff;
+}
+
+/* ---------- Hero ---------- */
+.hero-img-wrap {
+  position: relative;
+  border-radius: 32px;
+  overflow: hidden;
+  background: linear-gradient(180deg, #0f1410, #1c3a2e);
+  min-height: 540px;
+}
+.hero-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 15%;
+  opacity: 0.92;
+}
+@media (min-width: 768px) {
+  .hero-img-wrap {
+    min-height: 620px;
   }
 }
+.hero-shade {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(15, 20, 16, 0.05) 0%, rgba(15, 20, 16, 0.55) 90%),
+    linear-gradient(90deg, rgba(15, 20, 16, 0.45) 0%, rgba(15, 20, 16, 0) 50%);
+}
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ---------- Reviews carousel ---------- */
+.ig-card {
+  position: relative;
+  background: #ffffff;
+  border: 1px solid #ebe6d6;
+  border-radius: 24px;
+  padding: 12px;
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.ig-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px -18px rgba(15, 20, 16, 0.25);
+}
+.ig-card .instagram-media {
+  box-shadow: none !important;
+  border: 0 !important;
+}
+/* iframes capture wheel events → kills Lenis smooth scroll over the card.
+   Disable pointer input on the embed; the overlay anchor handles clicks. */
+.ig-card iframe {
+  pointer-events: none;
+}
+
+.reviews-swiper {
+  padding: 8px 4px 60px;
+  position: relative;
+}
+.reviews-swiper .swiper-slide {
+  height: auto;
+  display: flex;
+}
+.reviews-swiper .swiper-slide > .ig-card {
+  width: 100%;
+}
+
+.reviews-nav {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 16px;
+}
+.reviews-nav button {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  background: #ffffff;
+  border: 1px solid #e6e2d6;
+  color: #0f1410;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  cursor: pointer;
+}
+.reviews-nav button:hover {
+  background: #0f1410;
+  color: #d4f548;
+  transform: translateY(-1px);
 }

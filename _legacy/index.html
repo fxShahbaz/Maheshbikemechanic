@@ -1,0 +1,990 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mahesh Bike Institute — 4 Months Professional Bike Mechanic Training, Pune</title>
+  <meta name="description" content="India's most practical 4-month bike mechanic training. Live engines, BS3/BS4/BS6 wiring, customer bike workshop and EV training in Pune, Maharashtra." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ink:    '#0f1410',
+            cream:  '#f3f1ea',
+            paper:  '#faf8f3',
+            forest: '#1c3a2e',
+            moss:   '#2a5641',
+            lime:   '#d4f548',
+            limeDk: '#bce32a',
+            muted:  '#6b7268',
+            line:   '#e6e2d6'
+          },
+          fontFamily: {
+            display: ['Fraunces', 'serif'],
+            sans:    ['Inter', 'Noto Sans Devanagari', 'system-ui', 'sans-serif'],
+            hindi:   ['"Noto Sans Devanagari"', 'Inter', 'sans-serif']
+          },
+          borderRadius: {
+            '4xl': '2rem',
+            '5xl': '2.5rem'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    html { scroll-behavior: smooth; }
+    body { background: #f3f1ea; color: #0f1410; font-family: 'Inter', 'Noto Sans Devanagari', sans-serif; -webkit-font-smoothing: antialiased; }
+    .display { font-family: 'Fraunces', serif; font-weight: 500; letter-spacing: -0.02em; line-height: 1.02; }
+    .display-tight { font-family: 'Fraunces', serif; font-weight: 500; letter-spacing: -0.025em; line-height: 0.98; }
+    .hindi { font-family: 'Noto Sans Devanagari', 'Inter', sans-serif; }
+    .label { font-size: 0.78rem; letter-spacing: 0.04em; }
+
+    .pill-btn {
+      display: inline-flex; align-items: center; gap: 0.55rem;
+      padding: 0.85rem 1.35rem; border-radius: 999px;
+      background: #d4f548; color: #0f1410; font-weight: 600;
+      transition: transform .2s ease, background .2s ease;
+    }
+    .pill-btn:hover { background: #bce32a; transform: translateY(-1px); }
+    .pill-btn .arr {
+      display:inline-flex; align-items:center; justify-content:center;
+      width: 22px; height: 22px; border-radius: 999px; background: #0f1410; color:#d4f548;
+    }
+
+    .ghost-btn {
+      display: inline-flex; align-items: center; gap: 0.55rem;
+      padding: 0.85rem 1.35rem; border-radius: 999px;
+      background: transparent; color: #0f1410; border: 1px solid #d6d1c1; font-weight: 500;
+    }
+    .ghost-btn:hover { background: #ffffff; }
+
+    .social-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 38px; height: 38px; border-radius: 999px;
+      background: #ffffff; border: 1px solid #e6e2d6; color: #0f1410;
+      transition: background .2s ease, color .2s ease, transform .2s ease;
+    }
+    .social-btn:hover { background: #0f1410; color: #d4f548; transform: translateY(-1px); }
+
+    .ig-card {
+      background: #ffffff; border: 1px solid #ebe6d6; border-radius: 24px;
+      padding: 12px; overflow: hidden;
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+    .ig-card:hover { transform: translateY(-3px); box-shadow: 0 10px 30px -18px rgba(15,20,16,.25); }
+    .ig-card .instagram-media { box-shadow: none !important; border: 0 !important; }
+
+    /* Reviews carousel */
+    .reviews-swiper { padding: 8px 4px 60px; position: relative; }
+    .reviews-swiper .swiper-slide { height: auto; display: flex; }
+    .reviews-swiper .swiper-slide > .ig-card { width: 100%; }
+    .reviews-nav {
+      display: flex; gap: 10px; justify-content: flex-end; align-items: center;
+      margin-top: 16px;
+    }
+    .reviews-nav button {
+      width: 44px; height: 44px; border-radius: 999px;
+      background: #ffffff; border: 1px solid #e6e2d6; color: #0f1410;
+      display: inline-flex; align-items: center; justify-content: center;
+      transition: background .2s ease, color .2s ease, transform .2s ease;
+      cursor: pointer;
+    }
+    .reviews-nav button:hover { background: #0f1410; color: #d4f548; transform: translateY(-1px); }
+    .reviews-nav button:disabled { opacity: .4; cursor: default; transform: none; background: #ffffff; color: #0f1410; }
+
+    .nav-link { font-size: 0.92rem; color: #0f1410; opacity: 0.85; }
+    .nav-link:hover { opacity: 1; }
+
+    .feature-pill {
+      display:flex; gap: 0.85rem; align-items:flex-start;
+      padding: 1rem 1.1rem; background: #ffffff; border: 1px solid #ebe6d6; border-radius: 18px;
+    }
+
+    .module-card {
+      background: #ffffff; border: 1px solid #ebe6d6; border-radius: 24px;
+      padding: 1.6rem; transition: transform .25s ease, box-shadow .25s ease;
+    }
+    .module-card:hover { transform: translateY(-3px); box-shadow: 0 10px 30px -18px rgba(15,20,16,.25); }
+
+    .icon-box {
+      width: 44px; height: 44px; border-radius: 12px; background: #f3f1ea;
+      display:flex; align-items:center; justify-content:center; color:#1c3a2e;
+    }
+
+    .bike-chip {
+      display:inline-flex; align-items:center; gap:.4rem;
+      padding: .5rem .85rem; border-radius: 999px;
+      background: #ffffff; border: 1px solid #e6e2d6;
+      color: #0f1410; font-size: .85rem; font-weight: 500;
+    }
+    .green-section .bike-chip { color: #1c3a2e; }
+
+    .hero-img-wrap {
+      position: relative; border-radius: 32px; overflow: hidden;
+      background: linear-gradient(180deg,#0f1410, #1c3a2e);
+      min-height: 540px;
+    }
+    .hero-img {
+      position: absolute; inset: 0; width:100%; height:100%; object-fit: cover;
+      opacity: .92;
+    }
+    .hero-shade {
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(180deg, rgba(15,20,16,.05) 0%, rgba(15,20,16,.55) 90%),
+        linear-gradient(90deg, rgba(15,20,16,.45) 0%, rgba(15,20,16,0) 50%);
+    }
+
+    .section-tag {
+      display:inline-flex; align-items:center; gap:.45rem;
+      font-size: .82rem; color:#5a6157;
+    }
+    .section-tag::before {
+      content:''; width: 6px; height: 6px; border-radius: 999px; background:#1c3a2e;
+    }
+
+    .stat-card {
+      background: #ffffff; border: 1px solid #ebe6d6; border-radius: 20px; padding: 1.1rem 1.2rem;
+    }
+
+    .green-section {
+      background: #1c3a2e; color: #e9e6db;
+      border-radius: 32px;
+    }
+    .green-section .display { color: #fff; }
+
+    .num-mono { font-variant-numeric: tabular-nums; }
+
+    /* Mobile menu */
+    .mobile-only { display: none; }
+    @media (max-width: 900px) {
+      .desktop-only { display: none !important; }
+      .mobile-only { display: inline-flex; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============== NAV ============== -->
+  <header class="px-4 md:px-8 pt-5">
+    <nav class="max-w-[1320px] mx-auto flex items-center justify-between bg-white/70 backdrop-blur border border-line rounded-full pl-5 pr-2 py-2">
+      <a href="#" class="flex items-center gap-2">
+        <span class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-lime">
+          <!-- gear icon -->
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0f1410" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1A1.7 1.7 0 0 0 4.6 9a1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>
+          </svg>
+        </span>
+        <span class="font-display text-[1.15rem]">Mahesh Bike Institute</span>
+      </a>
+
+      <div class="hidden md:flex items-center gap-7">
+        <a href="#about" class="nav-link">About</a>
+        <a href="#modules" class="nav-link">Course</a>
+        <a href="#bikes" class="nav-link">Bikes Covered</a>
+        <a href="#fees" class="nav-link">Fees</a>
+        <a href="#reviews" class="nav-link">Reviews</a>
+        <a href="#contact" class="nav-link">Contact</a>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <a href="https://www.instagram.com/bike_mechanic_mahesh/" target="_blank" rel="noopener" aria-label="Instagram"
+           class="social-btn hidden sm:inline-flex">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        </a>
+        <a href="https://www.facebook.com/bikemechanicmahesh/" target="_blank" rel="noopener" aria-label="Facebook"
+           class="social-btn hidden sm:inline-flex">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.56 9.88V14.9H7.9V12h2.54V9.8c0-2.51 1.5-3.9 3.79-3.9 1.1 0 2.24.2 2.24.2v2.46h-1.26c-1.25 0-1.63.77-1.63 1.56V12h2.78l-.44 2.9h-2.34v6.98A10 10 0 0 0 22 12z"/></svg>
+        </a>
+        <a href="#contact" class="pill-btn text-sm">
+          Enroll Now
+          <span class="arr">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg>
+          </span>
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ============== HERO ============== -->
+  <section class="px-4 md:px-8 mt-6">
+    <div class="max-w-[1320px] mx-auto">
+      <div class="hero-img-wrap">
+        <img class="hero-img"
+             src="https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1800&q=80"
+             alt="Motorcycle workshop" />
+        <div class="hero-shade"></div>
+
+        <div class="relative z-10 flex flex-col justify-between h-full min-h-[540px] p-6 md:p-12">
+          <div class="flex items-center gap-2 text-white/90">
+            <span class="text-xs uppercase tracking-widest">Pune · Maharashtra</span>
+            <span class="w-1 h-1 rounded-full bg-white/60"></span>
+            <span class="text-xs uppercase tracking-widest">Since 2014</span>
+          </div>
+
+          <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-8 mt-auto">
+            <h1 class="display-tight text-white text-[2.4rem] sm:text-[3.2rem] md:text-[4.5rem] max-w-[820px]">
+              Become a <span class="italic">complete</span><br/>
+              Bike Mechanic<br/>
+              in just <u class="decoration-lime decoration-4 underline-offset-[10px]">4&nbsp;months</u>.
+            </h1>
+
+            <div class="md:max-w-[320px]">
+              <a href="#contact" class="pill-btn">
+                Let's Talk
+                <span class="arr">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg>
+                </span>
+              </a>
+              <p class="text-white/85 text-sm mt-4 leading-relaxed">
+                India's most hands-on bike mechanic training — live engines, real customer bikes, BS3 to BS6 wiring and EV technology, all under one roof.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- KPIs strip -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mt-5">
+        <div class="stat-card">
+          <div class="display text-3xl">4 months</div>
+          <div class="text-muted text-sm mt-1">Complete training</div>
+        </div>
+        <div class="stat-card">
+          <div class="display num-mono text-3xl">100<span class="text-muted text-base font-sans align-top ml-0.5">+</span></div>
+          <div class="text-muted text-sm mt-1">Bike models covered</div>
+        </div>
+        <div class="stat-card">
+          <div class="display num-mono text-3xl">100<span class="text-muted text-base font-sans align-top ml-0.5">–390cc</span></div>
+          <div class="text-muted text-sm mt-1">Engine practice range</div>
+        </div>
+        <div class="stat-card">
+          <div class="display num-mono text-3xl">7</div>
+          <div class="text-muted text-sm mt-1">Specialist modules</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== ABOUT ============== -->
+  <section id="about" class="px-4 md:px-8 mt-24">
+    <div class="max-w-[1320px] mx-auto">
+      <div class="grid md:grid-cols-2 gap-10 md:gap-16">
+        <div>
+          <div class="section-tag">(About the Institute)</div>
+          <div class="mt-6 space-y-3">
+            <div class="feature-pill">
+              <div class="icon-box">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></svg>
+              </div>
+              <div>
+                <div class="font-semibold">Hands-on workshop training</div>
+                <div class="text-muted text-sm">Real customer bikes, real engines, real problems — every day.</div>
+              </div>
+            </div>
+            <div class="feature-pill">
+              <div class="icon-box">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+              </div>
+              <div>
+                <div class="font-semibold">BS3, BS4, BS6 &amp; EV</div>
+                <div class="text-muted text-sm">From classic carburettor bikes to fuel-injection and electric vehicles.</div>
+              </div>
+            </div>
+            <div class="feature-pill">
+              <div class="icon-box">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01"/><path d="M15 9h.01"/></svg>
+              </div>
+              <div>
+                <div class="font-semibold">Hostel + Food included</div>
+                <div class="text-muted text-sm">Stay on campus and focus fully on becoming an expert mechanic.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-col justify-center">
+          <h2 class="display text-[2.2rem] md:text-[3rem]">
+            From <span class="italic">curious learner</span> to certified bike mechanic — in four focused months.
+          </h2>
+          <p class="text-muted mt-5 leading-relaxed max-w-[560px]">
+            At Mahesh Bike Institute we train freshers to become complete two-wheeler mechanics. Live engines, real wiring boards, customer bikes and BS6 / EV technology — every module is designed for the workshop floor, not the classroom.
+          </p>
+          <p class="text-muted mt-3 hindi leading-relaxed max-w-[560px]">
+            हम यहाँ ४ महीनों में आपको पूरा एक्सपर्ट बाइक मैकेनिक बनाते हैं — Hero, Honda, TVS, Yamaha, Suzuki, Royal Enfield, KTM और अन्य सभी ब्रांड्स की पूरी ट्रेनिंग के साथ।
+          </p>
+          <div class="mt-7 flex gap-3">
+            <a href="#modules" class="pill-btn">
+              See Modules
+              <span class="arr">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </span>
+            </a>
+            <a href="#fees" class="ghost-btn">View Fees</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== MODULES ============== -->
+  <section id="modules" class="px-4 md:px-8 mt-28">
+    <div class="max-w-[1320px] mx-auto">
+      <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+        <div>
+          <div class="section-tag">(What You'll Learn)</div>
+          <h2 class="display text-[2.2rem] md:text-[3.2rem] mt-5 max-w-[680px]">
+            Seven focused modules.<br/>
+            <span class="italic">One complete mechanic.</span>
+          </h2>
+        </div>
+        <p class="text-muted max-w-[380px]">
+          Each module is taught on live demo engines and real bikes — so you can fix problems with confidence on day one of the job.
+        </p>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 mt-12">
+
+        <!-- 1 Demo Engine -->
+        <div class="module-card">
+          <div class="icon-box mb-5">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="10" rx="2"/><path d="M6 7V5"/><path d="M18 7V5"/><path d="M6 21v-4"/><path d="M18 21v-4"/></svg>
+          </div>
+          <h3 class="font-display text-xl">Demo Engine Practice</h3>
+          <p class="text-muted text-sm mt-2">100cc to 390cc — Hero, Honda, TVS, Yamaha, Suzuki, Royal Enfield, KTM.</p>
+          <ul class="text-sm mt-4 space-y-1.5 text-ink/80">
+            <li>• Working principle</li>
+            <li>• Fitting &amp; assembly</li>
+            <li>• Problem solving</li>
+          </ul>
+        </div>
+
+        <!-- 2 BS3/BS4 Wiring -->
+        <div class="module-card">
+          <div class="icon-box mb-5">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          </div>
+          <h3 class="font-display text-xl">BS3 &amp; BS4 Wiring</h3>
+          <p class="text-muted text-sm mt-2">From the easiest Splendor wiring to the toughest Pulsar 200 — complete colour codes &amp; faults.</p>
+          <ul class="text-sm mt-4 space-y-1.5 text-ink/80">
+            <li>• Colour code mastery</li>
+            <li>• Parts working</li>
+            <li>• Fault diagnosis</li>
+          </ul>
+        </div>
+
+        <!-- 3 Live Parts -->
+        <div class="module-card">
+          <div class="icon-box mb-5">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3v18"/><path d="M3 12h18"/></svg>
+          </div>
+          <h3 class="font-display text-xl">Live Parts Working</h3>
+          <p class="text-muted text-sm mt-2">Hands-on practice on every critical mechanical assembly of a live bike.</p>
+          <ul class="text-sm mt-4 space-y-1.5 text-ink/80">
+            <li>• Carburettor &amp; FI throttle body</li>
+            <li>• Disc brake &amp; suspension</li>
+            <li>• Piston, valve &amp; tappet setting</li>
+          </ul>
+        </div>
+
+        <!-- 4 Live Engine -->
+        <div class="module-card">
+          <div class="icon-box mb-5">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+          </div>
+          <h3 class="font-display text-xl">Live Engine Training</h3>
+          <p class="text-muted text-sm mt-2">Open &amp; rebuild institute bike engines — full disassembly to running condition.</p>
+          <ul class="text-sm mt-4 space-y-1.5 text-ink/80">
+            <li>• Engine teardown</li>
+            <li>• Reassembly</li>
+            <li>• Compression testing</li>
+          </ul>
+        </div>
+
+        <!-- 5 Customer Bike Work -->
+        <div class="module-card">
+          <div class="icon-box mb-5">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M15 6a1 1 0 0 0 0 2h1.5l1.5 4-3 6"/><path d="M9 18h6"/><path d="M9 18 5.5 7H3"/></svg>
+          </div>
+          <h3 class="font-display text-xl">Customer Bike Workshop</h3>
+          <p class="text-muted text-sm mt-2">Our in-house workshop runs real customer jobs — you work directly on them under supervision.</p>
+          <ul class="text-sm mt-4 space-y-1.5 text-ink/80">
+            <li>• Real-world problem solving</li>
+            <li>• Customer handling basics</li>
+            <li>• Speed &amp; quality of work</li>
+          </ul>
+        </div>
+
+        <!-- 6 BS6 Technology -->
+        <div class="module-card">
+          <div class="icon-box mb-5">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9z"/><path d="M9 1v3"/><path d="M15 1v3"/><path d="M9 20v3"/><path d="M15 20v3"/><path d="M20 9h3"/><path d="M20 14h3"/><path d="M1 9h3"/><path d="M1 14h3"/></svg>
+          </div>
+          <h3 class="font-display text-xl">BS6 Technology</h3>
+          <p class="text-muted text-sm mt-2">OBD scanner, FI diagnostics, sensors, actuators — complete BS6 troubleshooting.</p>
+          <ul class="text-sm mt-4 space-y-1.5 text-ink/80">
+            <li>• Scanning &amp; testing</li>
+            <li>• Sensor / actuator knowledge</li>
+            <li>• ECU fault clearance</li>
+          </ul>
+        </div>
+
+        <!-- 7 Electric Vehicle -->
+        <div class="module-card lg:col-span-1 sm:col-span-2 lg:col-auto">
+          <div class="icon-box mb-5">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 10V4.5a1.5 1.5 0 0 0-3 0V13l-3.5-3.5a1.5 1.5 0 1 0-2.12 2.12L9.88 16H6a1.5 1.5 0 0 0 0 3h7l3-3v-3a3 3 0 0 0-2-2.83"/></svg>
+          </div>
+          <h3 class="font-display text-xl">Electric Vehicle (EV)</h3>
+          <p class="text-muted text-sm mt-2">Okinawa, Praise Pro, Hero Vida and more — full EV system breakdown.</p>
+          <ul class="text-sm mt-4 space-y-1.5 text-ink/80">
+            <li>• VCU, MCU, BMS, Battery</li>
+            <li>• Motor &amp; controller</li>
+            <li>• Hall sensor diagnostics</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== GREEN BANNER — WIRING ============== -->
+  <section id="bikes" class="px-4 md:px-8 mt-28">
+    <div class="max-w-[1320px] mx-auto green-section p-8 md:p-14">
+      <div class="grid md:grid-cols-2 gap-10 md:gap-16 items-end">
+        <div>
+          <div class="text-lime/80 text-sm tracking-wider uppercase">Module · Wiring</div>
+          <h2 class="display mt-5 text-[2.1rem] md:text-[3rem] leading-[1.02]">
+            India's easiest wiring to India's toughest — <span class="italic">all on one board.</span>
+          </h2>
+          <p class="text-white/75 mt-5 max-w-[520px]">
+            From Hero Honda Splendor to Bajaj Pulsar 200, every wiring board is taught in detail — colour codes, parts working, common faults and fixes.
+          </p>
+        </div>
+
+        <div>
+          <div class="text-white/60 text-sm mb-4">Bikes covered in wiring training</div>
+          <div class="flex flex-wrap gap-2">
+            <span class="bike-chip">Splendor</span>
+            <span class="bike-chip">Old Platina</span>
+            <span class="bike-chip">Passion Pro</span>
+            <span class="bike-chip">Shine SP / CB</span>
+            <span class="bike-chip">Unicorn</span>
+            <span class="bike-chip">Activa Old</span>
+            <span class="bike-chip">Activa 3G / 4G</span>
+            <span class="bike-chip">Activa 5G</span>
+            <span class="bike-chip">Jupiter / Wego</span>
+            <span class="bike-chip">Access Old / New</span>
+            <span class="bike-chip">Apache RTR</span>
+            <span class="bike-chip">Apache Digital</span>
+            <span class="bike-chip">Pulsar 150 / 180</span>
+            <span class="bike-chip">Discover</span>
+            <span class="bike-chip">NS200</span>
+            <span class="bike-chip">iSmart 110</span>
+            <span class="bike-chip">Splendor i3S</span>
+            <span class="bike-chip">Bullet BS3 / BS4</span>
+            <span class="bike-chip">Yamaha FZ / FZ-FI</span>
+            <span class="bike-chip">R15 v1 / v2</span>
+            <span class="bike-chip">Pulsar RS200</span>
+            <span class="bike-chip">XL100</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== LIVE PARTS + LIVE ENGINE ============== -->
+  <section class="px-4 md:px-8 mt-28">
+    <div class="max-w-[1320px] mx-auto">
+      <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+        <div>
+          <div class="section-tag">(Hands-on Practice)</div>
+          <h2 class="display text-[2.2rem] md:text-[3rem] mt-5 max-w-[700px]">
+            Live parts. Live engines.<br/>
+            <span class="italic">Real customer bikes.</span>
+          </h2>
+        </div>
+        <p class="text-muted max-w-[380px]">
+          Every component you'll touch in your shop — we put it in your hands first.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-5 mt-12">
+        <!-- Live Engine card — replace src with your own engine photo (./images/live-engine.jpg) for production -->
+        <div class="rounded-3xl overflow-hidden h-[300px] md:h-[400px] bg-forest relative">
+          <img src="https://images.unsplash.com/photo-1547549082-6bc09f2049ae?auto=format&fit=crop&w=900&q=80"
+               alt="Motorcycle engine close-up" class="w-full h-full object-cover opacity-95" />
+          <div class="absolute bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-ink/85 to-transparent">
+            <div class="text-lime text-xs uppercase tracking-wider">Live Engine</div>
+            <div class="text-white font-display text-2xl mt-1">Open · Rebuild · Run</div>
+          </div>
+        </div>
+
+        <div class="rounded-3xl bg-white border border-line p-7 flex flex-col">
+          <div class="text-sm text-muted">Live Parts Training</div>
+          <ul class="mt-4 space-y-3 text-[15px]">
+            <li class="flex justify-between"><span>Carburettor</span><span class="text-muted">Tuning</span></li>
+            <li class="flex justify-between"><span>Fuel Injection / Throttle Body</span><span class="text-muted">FI</span></li>
+            <li class="flex justify-between"><span>Shock Absorber</span><span class="text-muted">Suspension</span></li>
+            <li class="flex justify-between"><span>Disc Brake System</span><span class="text-muted">Hydraulic</span></li>
+            <li class="flex justify-between"><span>Oil &amp; Lubricants</span><span class="text-muted">Service</span></li>
+            <li class="flex justify-between"><span>Wheel Bearing / Bush</span><span class="text-muted">F &amp; R</span></li>
+            <li class="flex justify-between"><span>Piston Rings / Block</span><span class="text-muted">Top-end</span></li>
+            <li class="flex justify-between"><span>Valve / Tappet / Head</span><span class="text-muted">Setting</span></li>
+            <li class="flex justify-between"><span>Front / Rear Tyre</span><span class="text-muted">Fitment</span></li>
+          </ul>
+        </div>
+
+        <div class="rounded-3xl overflow-hidden h-[300px] md:h-[400px] bg-forest relative">
+          <img src="./images/customer-workshop.png"
+               alt="Mahesh Bike Institute customer workshop training" class="w-full h-full object-cover object-center opacity-95" />
+          <div class="absolute bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-ink/95 via-ink/55 to-transparent">
+            <div class="text-lime text-xs uppercase tracking-wider">Customer Workshop</div>
+            <div class="text-white font-display text-2xl mt-1">Direct customer experience</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== BS6 TECHNOLOGY ============== -->
+  <section class="px-4 md:px-8 mt-28">
+    <div class="max-w-[1320px] mx-auto">
+      <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+        <div>
+          <div class="section-tag">(Module · BS6)</div>
+          <h2 class="display text-[2.2rem] md:text-[3rem] mt-5 max-w-[720px]">
+            BS6 Technology, <span class="italic">decoded.</span>
+          </h2>
+          <p class="text-muted mt-5 max-w-[520px]">
+            Scanning, sensor &amp; actuator testing, electronic part identification, fault clearance — taught on the bikes that arrive in real workshops today.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 md:max-w-[420px]">
+          <div class="stat-card">
+            <div class="text-xs text-muted uppercase tracking-wider">Tool</div>
+            <div class="font-display text-lg mt-1">OBD Scanner</div>
+          </div>
+          <div class="stat-card">
+            <div class="text-xs text-muted uppercase tracking-wider">Tool</div>
+            <div class="font-display text-lg mt-1">Fuel Pump Tester</div>
+          </div>
+          <div class="stat-card">
+            <div class="text-xs text-muted uppercase tracking-wider">Tool</div>
+            <div class="font-display text-lg mt-1">Multimeter</div>
+          </div>
+          <div class="stat-card">
+            <div class="text-xs text-muted uppercase tracking-wider">Tool</div>
+            <div class="font-display text-lg mt-1">Fuel Pressure Gauge</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-10 bg-white border border-line rounded-3xl p-7 md:p-9">
+        <div class="text-sm text-muted mb-5">BS6 bikes covered in training</div>
+        <div class="flex flex-wrap gap-2">
+          <span class="bike-chip">Hero Splendor / Xtec</span>
+          <span class="bike-chip">Hero Super Splendor</span>
+          <span class="bike-chip">Hero HF Deluxe</span>
+          <span class="bike-chip">Hero Glamour</span>
+          <span class="bike-chip">Hero Xtreme</span>
+          <span class="bike-chip">Honda Shine CB</span>
+          <span class="bike-chip">Honda Shine SP</span>
+          <span class="bike-chip">Honda Unicorn</span>
+          <span class="bike-chip">Honda Activa</span>
+          <span class="bike-chip">Honda CB200X</span>
+          <span class="bike-chip">Bajaj Platina (E-Carb)</span>
+          <span class="bike-chip">Bajaj Pulsar 150</span>
+          <span class="bike-chip">Bajaj Pulsar 220</span>
+          <span class="bike-chip">TVS Sport</span>
+          <span class="bike-chip">TVS Raider</span>
+          <span class="bike-chip">TVS Apache</span>
+          <span class="bike-chip">TVS Jupiter</span>
+          <span class="bike-chip">TVS XL100</span>
+          <span class="bike-chip">Suzuki Burgman</span>
+          <span class="bike-chip">Suzuki Access 125</span>
+          <span class="bike-chip">Suzuki Gixxer SF250</span>
+          <span class="bike-chip">KTM RC</span>
+          <span class="bike-chip">KTM Duke 200</span>
+          <span class="bike-chip">Jawa 42</span>
+          <span class="bike-chip">+ more</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== EV TRAINING ============== -->
+  <section class="px-4 md:px-8 mt-28">
+    <div class="max-w-[1320px] mx-auto">
+      <div class="green-section p-8 md:p-14 grid md:grid-cols-2 gap-10 md:gap-16 items-center">
+        <div>
+          <div class="text-lime/80 text-sm tracking-wider uppercase">Module · Electric Vehicles</div>
+          <h2 class="display mt-5 text-[2.1rem] md:text-[3rem]">
+            The future runs on <span class="italic">electrons.</span>
+          </h2>
+          <p class="text-white/75 mt-5 max-w-[520px]">
+            EV is the fastest-growing two-wheeler segment in India. Our EV module makes sure you're ready for it — from controller to BMS, motor to hall sensor.
+          </p>
+          <div class="mt-7 flex flex-wrap gap-2">
+            <span class="bike-chip">Okinawa</span>
+            <span class="bike-chip">Praise Pro</span>
+            <span class="bike-chip">Hero Vida</span>
+            <span class="bike-chip">+ more</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div class="bg-moss/60 border border-white/10 rounded-2xl p-5">
+            <div class="text-lime text-2xl font-display">VCU</div>
+            <div class="text-white/70 text-sm mt-1">Vehicle Control Unit</div>
+          </div>
+          <div class="bg-moss/60 border border-white/10 rounded-2xl p-5">
+            <div class="text-lime text-2xl font-display">MCU</div>
+            <div class="text-white/70 text-sm mt-1">Motor Control Unit</div>
+          </div>
+          <div class="bg-moss/60 border border-white/10 rounded-2xl p-5">
+            <div class="text-lime text-2xl font-display">BMS</div>
+            <div class="text-white/70 text-sm mt-1">Battery Management</div>
+          </div>
+          <div class="bg-moss/60 border border-white/10 rounded-2xl p-5">
+            <div class="text-lime text-2xl font-display">Motor</div>
+            <div class="text-white/70 text-sm mt-1">Hub &amp; mid-drive</div>
+          </div>
+          <div class="bg-moss/60 border border-white/10 rounded-2xl p-5">
+            <div class="text-lime text-2xl font-display">Controller</div>
+            <div class="text-white/70 text-sm mt-1">Logic &amp; faults</div>
+          </div>
+          <div class="bg-moss/60 border border-white/10 rounded-2xl p-5">
+            <div class="text-lime text-2xl font-display">Hall</div>
+            <div class="text-white/70 text-sm mt-1">Sensor diagnostics</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== FEES + HOSTEL ============== -->
+  <section id="fees" class="px-4 md:px-8 mt-28">
+    <div class="max-w-[1320px] mx-auto">
+      <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+        <div>
+          <div class="section-tag">(Transparent Fees)</div>
+          <h2 class="display text-[2.2rem] md:text-[3rem] mt-5 max-w-[680px]">
+            Simple, honest pricing.<br/>
+            <span class="italic">No hidden costs.</span>
+          </h2>
+        </div>
+        <p class="text-muted max-w-[380px]">
+          Pay for the training. Hostel is optional but recommended for students from outside Pune.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-5 mt-12">
+
+        <!-- Course fees card -->
+        <div class="md:col-span-2 bg-white border border-line rounded-3xl p-8 md:p-10">
+          <div class="flex items-baseline justify-between">
+            <div>
+              <div class="text-muted text-sm">Complete 4-month course</div>
+              <div class="display num-mono text-[3.2rem] md:text-[4.2rem] mt-1">₹40,000</div>
+            </div>
+            <div class="hidden md:block text-right">
+              <div class="text-xs uppercase tracking-wider text-muted">Duration</div>
+              <div class="font-display text-2xl">4 months</div>
+            </div>
+          </div>
+
+          <hr class="my-7 border-line" />
+
+          <div class="grid sm:grid-cols-2 gap-5">
+            <div>
+              <div class="text-xs uppercase tracking-wider text-muted">One-time Registration</div>
+              <div class="font-display num-mono text-2xl mt-1">₹2,500</div>
+              <p class="text-sm text-muted mt-2">Includes stationery, T-shirts &amp; bike wiring PDFs.</p>
+            </div>
+            <div>
+              <div class="text-xs uppercase tracking-wider text-muted">What's covered</div>
+              <ul class="text-sm mt-2 space-y-1.5">
+                <li>✓ All 7 modules</li>
+                <li>✓ Live engines &amp; customer bikes</li>
+                <li>✓ BS6 + EV training</li>
+                <li>✓ Wiring PDFs &amp; reference material</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="mt-8">
+            <a href="#contact" class="pill-btn">
+              Enroll Now
+              <span class="arr">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Hostel card -->
+        <div class="green-section p-8 flex flex-col justify-between">
+          <div>
+            <div class="text-lime/80 text-sm uppercase tracking-wider">Optional</div>
+            <h3 class="display text-3xl mt-3">Hostel + Food</h3>
+            <p class="text-white/75 text-sm mt-3">
+              On-campus stay with full meals — perfect for students travelling from outside Pune.
+            </p>
+          </div>
+          <div class="mt-8">
+            <div class="text-lime text-xs uppercase tracking-wider">Monthly</div>
+            <div class="display num-mono text-5xl text-white mt-1">₹6,000</div>
+            <div class="text-white/60 text-sm mt-1">Stay + Food included</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== REVIEWS / TESTIMONIALS ============== -->
+  <section id="reviews" class="px-4 md:px-8 mt-28">
+    <div class="max-w-[1320px] mx-auto">
+      <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+        <div>
+          <div class="section-tag">(Student Reviews)</div>
+          <h2 class="display text-[2.2rem] md:text-[3.2rem] mt-5 max-w-[700px]">
+            Real stories from <span class="italic">real students.</span>
+          </h2>
+        </div>
+        <p class="text-muted max-w-[380px]">
+          Hear directly from our students about their training journey at Mahesh Bike Institute — straight from our Instagram.
+        </p>
+      </div>
+
+      <div class="swiper reviews-swiper mt-12">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide">
+            <div class="ig-card">
+              <blockquote class="instagram-media"
+                data-instgrm-permalink="https://www.instagram.com/p/DXyGT9kPw0N/?utm_source=ig_embed&amp;utm_campaign=loading"
+                data-instgrm-version="14"
+                style="background:#FFF; border:0; border-radius:18px; margin:0; max-width:540px; min-width:326px; padding:0; width:100%;">
+              </blockquote>
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="ig-card">
+              <blockquote class="instagram-media"
+                data-instgrm-permalink="https://www.instagram.com/p/DXqXmX4EeM_/?utm_source=ig_embed&amp;utm_campaign=loading"
+                data-instgrm-version="14"
+                style="background:#FFF; border:0; border-radius:18px; margin:0; max-width:540px; min-width:326px; padding:0; width:100%;">
+              </blockquote>
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="ig-card">
+              <blockquote class="instagram-media"
+                data-instgrm-permalink="https://www.instagram.com/p/DXgD9UUER16/?utm_source=ig_embed&amp;utm_campaign=loading"
+                data-instgrm-version="14"
+                style="background:#FFF; border:0; border-radius:18px; margin:0; max-width:540px; min-width:326px; padding:0; width:100%;">
+              </blockquote>
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="ig-card">
+              <blockquote class="instagram-media"
+                data-instgrm-permalink="https://www.instagram.com/p/DW5hRyzDD9f/?utm_source=ig_embed&amp;utm_campaign=loading"
+                data-instgrm-version="14"
+                style="background:#FFF; border:0; border-radius:18px; margin:0; max-width:540px; min-width:326px; padding:0; width:100%;">
+              </blockquote>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="reviews-nav">
+        <button type="button" class="reviews-prev" aria-label="Previous review">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <button type="button" class="reviews-next" aria-label="Next review">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+        </button>
+      </div>
+
+      <div class="mt-10 flex flex-wrap items-center justify-between gap-4 bg-white border border-line rounded-3xl p-6 md:p-7">
+        <div class="flex items-center gap-4">
+          <div class="icon-box">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </div>
+          <div>
+            <div class="font-display text-xl">More reviews on Instagram</div>
+            <div class="text-muted text-sm">Follow @bike_mechanic_mahesh for daily updates &amp; student wins.</div>
+          </div>
+        </div>
+        <a href="https://www.instagram.com/bike_mechanic_mahesh/" target="_blank" rel="noopener" class="pill-btn">
+          Follow on Instagram
+          <span class="arr">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg>
+          </span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== CONTACT ============== -->
+  <section id="contact" class="px-4 md:px-8 mt-28">
+    <div class="max-w-[1320px] mx-auto">
+      <div class="bg-white border border-line rounded-4xl p-8 md:p-14 grid md:grid-cols-2 gap-10 md:gap-16 items-center">
+        <div>
+          <div class="section-tag">(Start Your Career)</div>
+          <h2 class="display text-[2.2rem] md:text-[3.2rem] mt-5">
+            Four months from now, <span class="italic">you could be a complete bike mechanic.</span>
+          </h2>
+          <p class="text-muted mt-5 max-w-[480px]">
+            Call or WhatsApp us today to confirm your seat. Limited batch size — we keep classes small for proper hands-on attention.
+          </p>
+
+          <div class="mt-8 flex flex-wrap gap-3">
+            <a href="tel:+910000000000" class="pill-btn">
+              Call Now
+              <span class="arr">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              </span>
+            </a>
+            <a href="https://wa.me/910000000000" class="ghost-btn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.8-.9-2-1s-.5-.1-.7.1-.8 1-1 1.2-.4.2-.7.1c-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.4.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4-.1-.5-.1-.1-.7-1.7-1-2.3-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.4 0 1.4 1 2.8 1.2 3 .1.2 2 3 4.8 4.2 1.7.7 2.3.8 3.1.7.5-.1 1.6-.6 1.8-1.3.2-.7.2-1.2.2-1.3-.1-.1-.3-.2-.6-.3zM12 2C6.5 2 2 6.5 2 12c0 1.7.4 3.4 1.3 4.9L2 22l5.3-1.4c1.4.8 3 1.2 4.7 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2z"/></svg>
+              WhatsApp
+            </a>
+          </div>
+
+          <div class="mt-8 pt-8 border-t border-line">
+            <div class="text-xs uppercase tracking-wider text-muted">Address</div>
+            <div class="font-display text-xl mt-2">Mahesh Bike Institute</div>
+            <div class="text-muted text-sm mt-1">Pune, Maharashtra, India</div>
+          </div>
+        </div>
+
+        <div class="bg-cream border border-line rounded-3xl p-7 md:p-9">
+          <div class="text-xs uppercase tracking-wider text-muted">Quick Enquiry</div>
+          <form class="mt-5 space-y-4" onsubmit="event.preventDefault(); alert('Thank you! We will contact you shortly.');">
+            <div>
+              <label class="text-sm">Full Name</label>
+              <input type="text" required class="mt-1 w-full bg-white border border-line rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-forest" placeholder="Your name" />
+            </div>
+            <div>
+              <label class="text-sm">Phone Number</label>
+              <input type="tel" required class="mt-1 w-full bg-white border border-line rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-forest" placeholder="+91 ..." />
+            </div>
+            <div>
+              <label class="text-sm">City</label>
+              <input type="text" class="mt-1 w-full bg-white border border-line rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-forest" placeholder="Your city" />
+            </div>
+            <div>
+              <label class="text-sm">Interested in</label>
+              <select class="mt-1 w-full bg-white border border-line rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-forest">
+                <option>4-month Complete Course</option>
+                <option>BS6 Technology only</option>
+                <option>EV Training only</option>
+                <option>Wiring Training</option>
+              </select>
+            </div>
+            <button type="submit" class="pill-btn w-full justify-center">
+              Request Callback
+              <span class="arr">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </span>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== FOOTER ============== -->
+  <footer class="px-4 md:px-8 mt-24 pb-12">
+    <div class="max-w-[1320px] mx-auto">
+      <div class="bg-ink text-white/85 rounded-4xl p-8 md:p-12">
+        <div class="grid md:grid-cols-3 gap-10">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-lime">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0f1410" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1A1.7 1.7 0 0 0 4.6 9a1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+              </span>
+              <span class="font-display text-xl text-white">Mahesh Bike Institute</span>
+            </div>
+            <p class="text-white/65 text-sm mt-4 max-w-xs">
+              India's most practical 4-month bike mechanic training. Pune, Maharashtra.
+            </p>
+          </div>
+
+          <div>
+            <div class="text-xs uppercase tracking-wider text-white/50">Course</div>
+            <ul class="mt-4 space-y-2 text-sm">
+              <li><a href="#modules" class="hover:text-lime">Modules</a></li>
+              <li><a href="#bikes" class="hover:text-lime">Bikes covered</a></li>
+              <li><a href="#fees" class="hover:text-lime">Fees</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <div class="text-xs uppercase tracking-wider text-white/50">Contact</div>
+            <ul class="mt-4 space-y-2 text-sm">
+              <li>Pune, Maharashtra</li>
+              <li><a href="tel:+910000000000" class="hover:text-lime">+91 XXXXX XXXXX</a></li>
+              <li><a href="https://wa.me/910000000000" class="hover:text-lime">WhatsApp</a></li>
+            </ul>
+            <div class="flex items-center gap-2 mt-5">
+              <a href="https://www.instagram.com/bike_mechanic_mahesh/" target="_blank" rel="noopener" aria-label="Instagram"
+                 class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-white/10 hover:bg-lime hover:text-ink text-white transition">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+              </a>
+              <a href="https://www.facebook.com/bikemechanicmahesh/" target="_blank" rel="noopener" aria-label="Facebook"
+                 class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-white/10 hover:bg-lime hover:text-ink text-white transition">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.56 9.88V14.9H7.9V12h2.54V9.8c0-2.51 1.5-3.9 3.79-3.9 1.1 0 2.24.2 2.24.2v2.46h-1.26c-1.25 0-1.63.77-1.63 1.56V12h2.78l-.44 2.9h-2.34v6.98A10 10 0 0 0 22 12z"/></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <hr class="border-white/10 my-10" />
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 text-xs text-white/50">
+          <div>© <span id="yr">2026</span> Mahesh Bike Institute. All rights reserved.</div>
+          <div>Made for the next generation of bike mechanics.</div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script async src="https://www.instagram.com/embed.js"></script>
+  <script>
+    document.getElementById('yr').textContent = new Date().getFullYear();
+
+    // Reviews carousel — 3-up on desktop, infinite loop, autoplay
+    const reviewsSwiper = new Swiper('.reviews-swiper', {
+      loop: true,
+      slidesPerView: 1,
+      spaceBetween: 20,
+      speed: 700,
+      autoplay: { delay: 5000, disableOnInteraction: false, pauseOnMouseEnter: true },
+      breakpoints: {
+        640:  { slidesPerView: 2, spaceBetween: 20 },
+        1024: { slidesPerView: 3, spaceBetween: 20 }
+      },
+      navigation: { nextEl: '.reviews-next', prevEl: '.reviews-prev' },
+      on: {
+        init() { setTimeout(() => window.instgrm?.Embeds?.process(), 800); },
+        slideChangeTransitionEnd() { window.instgrm?.Embeds?.process(); }
+      }
+    });
+  </script>
+
+</body>
+</html>
