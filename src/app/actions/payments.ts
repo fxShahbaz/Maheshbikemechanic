@@ -3,7 +3,7 @@
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { supabaseServer } from "@/lib/supabase/server";
 import {
-  ADMIN_EMAIL,
+  isAdminEmail,
   type Payment,
   type PaymentMode,
   type PaymentPurpose,
@@ -15,7 +15,7 @@ async function requireAdmin() {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user || user.email !== ADMIN_EMAIL) {
+  if (!user || !isAdminEmail(user.email)) {
     throw new Error("Unauthorized");
   }
 }

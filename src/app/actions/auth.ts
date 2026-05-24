@@ -1,7 +1,7 @@
 "use server";
 
 import { supabaseServer } from "@/lib/supabase/server";
-import { ADMIN_EMAIL } from "@/lib/types";
+import { isAdminEmail } from "@/lib/types";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 
@@ -17,7 +17,7 @@ export async function signInWithPassword(
     return { ok: false, error: "Email and password are required." };
   }
 
-  if (email !== ADMIN_EMAIL) {
+  if (!isAdminEmail(email)) {
     return { ok: false, error: "Not an admin account." };
   }
 

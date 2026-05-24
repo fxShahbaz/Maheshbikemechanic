@@ -55,7 +55,15 @@ export const ENQUIRY_SOURCES = [
   "other",
 ] as const;
 
-export const ADMIN_EMAIL = "team.celvix@gmail.com";
+export const ADMIN_EMAILS: ReadonlySet<string> = new Set([
+  "team.celvix@gmail.com",
+  "bmm2wservice@gmail.com",
+]);
+
+export function isAdminEmail(email: string | null | undefined): boolean {
+  if (!email) return false;
+  return ADMIN_EMAILS.has(email.trim().toLowerCase());
+}
 
 // ============== Admissions ==============
 

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { supabaseServer } from "@/lib/supabase/server";
-import { ADMIN_EMAIL } from "@/lib/types";
+import { isAdminEmail } from "@/lib/types";
 import { redirect } from "next/navigation";
 import { signOut } from "@/app/actions/auth";
 import AdminShell from "./AdminShell";
@@ -28,7 +28,7 @@ export default async function AdminLayout({
     redirect("/admin/login");
   }
 
-  if (user.email !== ADMIN_EMAIL) {
+  if (!isAdminEmail(user.email)) {
     return (
       <main className="min-h-screen flex items-center justify-center px-4 bg-cream">
         <div className="max-w-md text-center">

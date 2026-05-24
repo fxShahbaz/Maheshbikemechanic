@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import LoginForm from "./LoginForm";
 import { supabaseServer } from "@/lib/supabase/server";
-import { ADMIN_EMAIL } from "@/lib/types";
+import { isAdminEmail } from "@/lib/types";
 import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
@@ -25,7 +25,7 @@ export default async function LoginPage({
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (user?.email === ADMIN_EMAIL) {
+  if (isAdminEmail(user?.email)) {
     redirect("/admin/enquiries");
   }
 

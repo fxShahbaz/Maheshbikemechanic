@@ -2,7 +2,7 @@
 
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { supabaseServer } from "@/lib/supabase/server";
-import { ADMIN_EMAIL, type EnquiryStatus } from "@/lib/types";
+import { isAdminEmail, type EnquiryStatus } from "@/lib/types";
 import { revalidatePath } from "next/cache";
 
 type SubmitResult = { ok: true } | { ok: false; error: string };
@@ -47,7 +47,7 @@ export async function submitEnquiry(formData: FormData): Promise<SubmitResult> {
 async function requireAdmin() {
   const supabase = await supabaseServer();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user || user.email !== ADMIN_EMAIL) {
+  if (!user || !isAdminEmail(user.email)) {
     throw new Error("Unauthorized");
   }
 }
