@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { headers } from "next/headers";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import {
   formatINR,
@@ -7,6 +8,8 @@ import {
   type PaymentMode,
 } from "@/lib/types";
 import PaymentsView from "./PaymentsView";
+import PinGate from "./PinGate";
+import { isPaymentsUnlocked } from "@/lib/payments-unlock";
 
 export const dynamic = "force-dynamic";
 
@@ -20,6 +23,19 @@ export type PaymentRow = Payment & {
 };
 
 export default async function PaymentsPage() {
+  const h = await headers();
+  const referer = h.get("referer") ?? "";
+  let cameFromPayments = false;
+  try {
+    cameFromPayments = new URL(referer).pathname.startsWith("/admin/payments");
+  } catch {
+    cameFromPayments = false;
+  }
+
+  if (!cameFromPayments || !(await isPaymentsUnlocked())) {
+    return <PinGate />;
+  }
+
   const supabase = supabaseAdmin();
   const { data, error } = await supabase
     .from("payments")
