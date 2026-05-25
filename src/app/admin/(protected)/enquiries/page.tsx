@@ -13,7 +13,7 @@ export default async function EnquiriesPage() {
 
   if (error) {
     return (
-      <main className="w-full px-4 md:px-8 lg:px-10 py-6 md:py-10">
+      <main className="w-full px-4 md:px-6 lg:px-8 py-6 md:py-10">
         <h1 className="font-display text-3xl mb-4">Enquiries</h1>
         <div className="bg-red-50 border border-red-200 rounded-2xl p-5 text-red-800">
           <div className="font-medium">Could not load enquiries.</div>
@@ -37,7 +37,7 @@ export default async function EnquiriesPage() {
   };
 
   return (
-    <main className="w-full px-4 md:px-8 lg:px-10 py-6 md:py-10">
+    <main className="w-full px-4 md:px-6 lg:px-8 py-6 md:py-10">
       <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
         <div>
           <h1 className="font-display text-3xl md:text-4xl">Enquiries</h1>

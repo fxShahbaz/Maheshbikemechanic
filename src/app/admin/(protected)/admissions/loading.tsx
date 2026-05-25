@@ -2,7 +2,7 @@ import Skeleton from "@/components/Skeleton";
 
 export default function LoadingAdmissions() {
   return (
-    <main className="w-full px-4 md:px-8 lg:px-10 py-6 md:py-10">
+    <main className="w-full px-4 md:px-6 lg:px-8 py-6 md:py-10">
       <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
         <div>
           <Skeleton className="h-9 w-48" />

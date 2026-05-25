@@ -159,6 +159,7 @@ export async function updateAdmission(
 export type AdmissionWithPaid = import("@/lib/types").Admission & {
   paid: number;
   payment_count: number;
+  last_paid_on: string | null;
 };
 
 export async function listAdmissionsWithPaid(): Promise<AdmissionWithPaid[]> {
@@ -169,20 +170,32 @@ export async function listAdmissionsWithPaid(): Promise<AdmissionWithPaid[]> {
       .from("admissions")
       .select("*")
       .order("created_at", { ascending: false }),
-    supabase.from("payments").select("admission_id, amount"),
+    supabase.from("payments").select("admission_id, amount, paid_on"),
   ]);
 
-  const totals = new Map<string, { paid: number; count: number }>();
+  const totals = new Map<
+    string,
+    { paid: number; count: number; last: string | null }
+  >();
   for (const p of payments ?? []) {
-    const cur = totals.get(p.admission_id as string) ?? { paid: 0, count: 0 };
+    const key = p.admission_id as string;
+    const cur = totals.get(key) ?? { paid: 0, count: 0, last: null };
     cur.paid += Number(p.amount) || 0;
     cur.count += 1;
-    totals.set(p.admission_id as string, cur);
+    const on = p.paid_on as string | null;
+    // paid_on is an ISO date (YYYY-MM-DD), so lexical compare = chronological.
+    if (on && (cur.last == null || on > cur.last)) cur.last = on;
+    totals.set(key, cur);
   }
 
   return (admissions ?? []).map((a) => {
-    const t = totals.get(a.id) ?? { paid: 0, count: 0 };
-    return { ...(a as import("@/lib/types").Admission), paid: t.paid, payment_count: t.count };
+    const t = totals.get(a.id) ?? { paid: 0, count: 0, last: null };
+    return {
+      ...(a as import("@/lib/types").Admission),
+      paid: t.paid,
+      payment_count: t.count,
+      last_paid_on: t.last,
+    };
   });
 }
 

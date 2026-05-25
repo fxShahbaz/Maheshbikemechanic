@@ -66,6 +66,27 @@ const NAV = [
     ),
   },
   {
+    href: "/admin/students",
+    label: "Students",
+    icon: (
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+        <circle cx="9" cy="7" r="4" />
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+      </svg>
+    ),
+  },
+  {
     href: "/admin/payments",
     label: "Payments",
     icon: (
@@ -128,8 +149,8 @@ export default function AdminShell({
     });
   }
 
-  const sidebarWidth = collapsed ? "w-[72px]" : "w-[288px]";
-  const contentMargin = collapsed ? "md:ml-[72px]" : "md:ml-[288px]";
+  const sidebarWidth = collapsed ? "w-[72px]" : "w-[240px]";
+  const contentMargin = collapsed ? "md:ml-[72px]" : "md:ml-[240px]";
 
   return (
     <div className="min-h-screen bg-cream">
@@ -168,10 +189,10 @@ export default function AdminShell({
           "fixed top-0 left-0 h-screen z-50 bg-white border-r border-line flex flex-col",
           "transition-[width,transform] duration-200 ease-out",
           // Desktop width (only animate after mount to avoid hydration flash)
-          mounted ? sidebarWidth : "w-[288px]",
+          mounted ? sidebarWidth : "w-[240px]",
           // Mobile slide-in
           "md:translate-x-0",
-          mobileOpen ? "translate-x-0 w-[288px]" : "-translate-x-full w-[288px] md:w-auto",
+          mobileOpen ? "translate-x-0 w-[240px]" : "-translate-x-full w-[240px] md:w-auto",
         ].join(" ")}
       >
         {/* Brand */}
@@ -311,7 +332,7 @@ export default function AdminShell({
       <main
         className={[
           "transition-[margin] duration-200 ease-out",
-          mounted ? contentMargin : "md:ml-[288px]",
+          mounted ? contentMargin : "md:ml-[240px]",
         ].join(" ")}
       >
         {children}

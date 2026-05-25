@@ -1,29 +1,35 @@
 import Skeleton from "@/components/Skeleton";
 
-export default function LoadingPayments() {
+export default function LoadingStudents() {
   return (
     <main className="w-full px-4 md:px-6 lg:px-8 py-6 md:py-10">
-      <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-        <div>
-          <Skeleton className="h-9 w-40" />
-          <Skeleton className="h-4 w-72 mt-3" />
-        </div>
-        <div className="grid grid-cols-4 gap-2 md:max-w-md md:w-full">
-          {Array.from({ length: 4 }).map((_, i) => (
-            <div
-              key={i}
-              className="rounded-xl border border-line bg-white px-3 py-2"
-            >
-              <Skeleton className="h-3 w-14" />
-              <Skeleton className="h-6 w-16 mt-2" />
-            </div>
-          ))}
-        </div>
+      <div>
+        <Skeleton className="h-9 w-40" />
+        <Skeleton className="h-4 w-80 mt-3" />
+      </div>
+
+      <div className="mt-8 grid grid-cols-2 md:grid-cols-5 gap-3">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <div
+            key={i}
+            className="rounded-2xl border border-line bg-white px-4 py-3.5"
+          >
+            <Skeleton className="h-3 w-16" />
+            <Skeleton className="h-6 w-20 mt-2" />
+          </div>
+        ))}
       </div>
 
       <div className="mt-6 md:mt-8 flex flex-col md:flex-row gap-3 md:items-center md:justify-between">
-        <Skeleton className="h-9 w-full md:w-80 rounded-xl" />
-        <Skeleton className="h-9 w-32 rounded-full" />
+        <div className="flex flex-wrap gap-2">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <Skeleton key={i} className="h-8 w-28 rounded-full" />
+          ))}
+        </div>
+        <div className="flex items-center gap-3 w-full md:w-auto">
+          <Skeleton className="h-9 w-40 rounded-xl" />
+          <Skeleton className="flex-1 md:w-64 h-9 rounded-xl" />
+        </div>
       </div>
 
       <div className="mt-5 bg-white border border-line rounded-2xl md:rounded-3xl overflow-hidden">
@@ -41,10 +47,9 @@ export default function LoadingPayments() {
               <Skeleton className="h-4 w-44" />
               <Skeleton className="h-3 w-28" />
             </div>
-            <Skeleton className="h-4 w-24 hidden md:block" />
             <Skeleton className="h-4 w-20 hidden md:block" />
-            <Skeleton className="h-5 w-24" />
-            <Skeleton className="h-6 w-20 rounded-full" />
+            <Skeleton className="h-4 w-20 hidden md:block" />
+            <Skeleton className="h-6 w-16 rounded-full" />
           </div>
         ))}
       </div>
