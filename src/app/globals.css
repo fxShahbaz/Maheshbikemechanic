@@ -81,6 +81,27 @@ body {
   .skeleton { animation: none; }
 }
 
+/* ---------- Chart bar reveal (CSS-only, no JS) ---------- */
+@keyframes mbi-grow-y {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
+}
+@keyframes mbi-grow-x {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+.bar-grow-y {
+  transform-origin: bottom;
+  animation: mbi-grow-y 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.bar-grow-x {
+  transform-origin: left;
+  animation: mbi-grow-x 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .bar-grow-y, .bar-grow-x { animation: none; }
+}
+
 /* ---------- Typography helpers ---------- */
 .display {
   font-family: var(--font-fraunces), serif;

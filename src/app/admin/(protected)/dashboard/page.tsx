@@ -1,17 +1,26 @@
 import Link from "next/link";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import type { Enquiry } from "@/lib/types";
+import { formatINR } from "@/lib/types";
+import { BarList, ChartCard, Funnel, TrendColumns } from "./charts";
 
 export const dynamic = "force-dynamic";
 
 export default async function DashboardPage() {
   const supabase = supabaseAdmin();
-  const { data, error } = await supabase
-    .from("enquiries")
-    .select("*")
-    .order("created_at", { ascending: false });
+  const [
+    { data, error },
+    { data: paymentRows },
+  ] = await Promise.all([
+    supabase
+      .from("enquiries")
+      .select("*")
+      .order("created_at", { ascending: false }),
+    supabase.from("payments").select("amount, paid_on"),
+  ]);
 
   const enquiries = (data ?? []) as Enquiry[];
+  const payments = (paymentRows ?? []) as { amount: number; paid_on: string | null }[];
 
   const now = Date.now();
   const dayMs = 24 * 60 * 60 * 1000;
@@ -32,10 +41,69 @@ export default async function DashboardPage() {
     ).length,
   };
 
+  // ---- Enquiries per week, last 8 weeks (oldest → newest) ----
+  const WEEKS = 8;
+  const weekData = Array.from({ length: WEEKS }, (_, i) => {
+    const weeksAgo = WEEKS - 1 - i;
+    const start = new Date(now - (weeksAgo + 1) * 7 * dayMs);
+    return {
+      label: start.toLocaleDateString("en-IN", { day: "numeric", month: "short" }),
+      value: 0,
+    };
+  });
+  for (const e of enquiries) {
+    const dw = Math.floor((now - new Date(e.created_at).getTime()) / (7 * dayMs));
+    if (dw >= 0 && dw < WEEKS) weekData[WEEKS - 1 - dw].value += 1;
+  }
+
+  // ---- Conversion funnel ----
+  const funnelStages = [
+    { label: "All leads", value: stats.total, colorClass: "bg-ink" },
+    { label: "Contacted", value: stats.total - stats.new, colorClass: "bg-moss" },
+    { label: "Enrolled", value: stats.enrolled, colorClass: "bg-lime" },
+  ];
+
+  // ---- Breakdown by source / interest (top 6) ----
+  const topGroups = (key: "source" | "interest", fallback: string) => {
+    const m = new Map<string, number>();
+    for (const e of enquiries) {
+      const v = (e[key] ?? "").trim() || fallback;
+      m.set(v, (m.get(v) ?? 0) + 1);
+    }
+    return [...m.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 6)
+      .map(([label, value]) => ({ label, value }));
+  };
+  const sources = topGroups("source", "Unknown");
+  const interests = topGroups("interest", "Unspecified");
+
+  // ---- Revenue collected per month, last 6 months ----
+  const MONTHS = 6;
+  const base = new Date();
+  const monthData = Array.from({ length: MONTHS }, (_, i) => {
+    const d = new Date(base.getFullYear(), base.getMonth() - (MONTHS - 1 - i), 1);
+    return {
+      key: `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`,
+      label: d.toLocaleDateString("en-IN", { month: "short" }),
+      value: 0,
+    };
+  });
+  const monthIndex = new Map(monthData.map((m, i) => [m.key, i]));
+  let totalCollected = 0;
+  for (const p of payments) {
+    const amt = Number(p.amount) || 0;
+    totalCollected += amt;
+    if (!p.paid_on) continue;
+    const idx = monthIndex.get(p.paid_on.slice(0, 7));
+    if (idx != null) monthData[idx].value += amt;
+  }
+  const thisMonthCollected = monthData[MONTHS - 1]?.value ?? 0;
+
   const recent = enquiries.slice(0, 5);
 
   return (
-    <main className="w-full px-4 md:px-8 lg:px-10 py-6 md:py-10">
+    <main className="w-full px-4 md:px-6 lg:px-8 py-6 md:py-10">
       <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
         <div>
           <h1 className="font-display text-3xl md:text-4xl">Dashboard</h1>
@@ -71,8 +139,51 @@ export default async function DashboardPage() {
             <Kpi label="Last 7 days" value={stats.week} />
           </div>
 
+          {/* Enquiries trend */}
+          <div className="mt-4">
+            <ChartCard
+              title="Enquiries — last 8 weeks"
+              subtitle={`${stats.week} this week · ${stats.total} all time`}
+            >
+              <TrendColumns
+                data={weekData}
+                emptyLabel="No enquiries in the last 8 weeks."
+              />
+            </ChartCard>
+          </div>
+
+          {/* Breakdown row */}
+          <div className="mt-4 grid gap-4 lg:grid-cols-3">
+            <ChartCard
+              title="Conversion pipeline"
+              subtitle="Leads → contacted → enrolled"
+            >
+              <Funnel stages={funnelStages} />
+            </ChartCard>
+            <ChartCard title="Top lead sources" subtitle="Where enquiries come from">
+              <BarList data={sources} emptyLabel="No sources recorded." />
+            </ChartCard>
+            <ChartCard title="Course interest" subtitle="Most-requested courses">
+              <BarList data={interests} emptyLabel="No interests recorded." />
+            </ChartCard>
+          </div>
+
+          {/* Revenue trend */}
+          <div className="mt-4">
+            <ChartCard
+              title="Revenue collected — last 6 months"
+              subtitle={`${formatINR(thisMonthCollected)} this month · ${formatINR(totalCollected)} all time`}
+            >
+              <TrendColumns
+                data={monthData}
+                format={inrCompact}
+                emptyLabel="No payments recorded yet."
+              />
+            </ChartCard>
+          </div>
+
           {/* Recent enquiries */}
-          <div className="mt-10 bg-white border border-line rounded-3xl overflow-hidden">
+          <div className="mt-4 bg-white border border-line rounded-3xl overflow-hidden">
             <div className="flex items-center justify-between px-6 py-4 border-b border-line">
               <div>
                 <div className="font-display text-xl">Recent enquiries</div>
@@ -151,6 +262,13 @@ function Kpi({
       <div className="font-display text-3xl num-mono mt-1">{value}</div>
     </div>
   );
+}
+
+function inrCompact(v: number): string {
+  if (v >= 10000000) return `₹${(v / 10000000).toFixed(1)}Cr`;
+  if (v >= 100000) return `₹${(v / 100000).toFixed(1)}L`;
+  if (v >= 1000) return `₹${v >= 10000 ? Math.round(v / 1000) : (v / 1000).toFixed(1)}k`;
+  return `₹${v}`;
 }
 
 const STATUS_STYLES: Record<Enquiry["status"], string> = {
