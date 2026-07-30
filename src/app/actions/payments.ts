@@ -1,24 +1,9 @@
 "use server";
 
+import { requireAdmin } from "@/lib/auth";
 import { supabaseAdmin } from "@/lib/supabase/admin";
-import { supabaseServer } from "@/lib/supabase/server";
-import {
-  isAdminEmail,
-  type Payment,
-  type PaymentMode,
-  type PaymentPurpose,
-} from "@/lib/types";
+import type { Payment, PaymentMode, PaymentPurpose } from "@/lib/types";
 import { revalidatePath } from "next/cache";
-
-async function requireAdmin() {
-  const supabase = await supabaseServer();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user || !isAdminEmail(user.email)) {
-    throw new Error("Unauthorized");
-  }
-}
 
 type PaymentInput = {
   admission_id: string;

@@ -97,6 +97,40 @@ export default function AppsDialog({ open, onClose }: Props) {
             </div>
 
             <div className="px-4 pb-5 space-y-2">
+              <a
+                href="/student/login"
+                className="group flex items-center gap-3 px-3 py-2.5 rounded-2xl bg-lime/25 hover:bg-lime/40 border border-lime transition"
+              >
+                <span className="shrink-0 w-11 h-11 rounded-xl bg-lime flex items-center justify-center">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0f1410" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+                    <path d="M6 12v5c3 3 9 3 12 0v-5" />
+                  </svg>
+                </span>
+                <div className="min-w-0 flex-1">
+                  <div className="font-medium text-[15px] leading-tight">
+                    Student Portal
+                  </div>
+                  <div className="text-xs text-muted mt-0.5">
+                    Practice log, study material &amp; updates
+                  </div>
+                </div>
+                <div className="shrink-0 text-ink/40 group-hover:text-ink transition">
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" />
+                  </svg>
+                </div>
+              </a>
               {APPS.map((app) => (
                 <a
                   key={app.url}

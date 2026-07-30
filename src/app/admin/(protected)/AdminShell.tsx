@@ -106,6 +106,101 @@ const NAV = [
       </svg>
     ),
   },
+  {
+    href: "/admin/portal",
+    label: "Portal Access",
+    icon: (
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+        <circle cx="9" cy="7" r="4" />
+        <polyline points="16 11 18 13 22 9" />
+      </svg>
+    ),
+  },
+  {
+    href: "/admin/practice",
+    label: "Practice",
+    icon: (
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <circle cx="12" cy="12" r="10" />
+        <polyline points="12 6 12 12 16 14" />
+      </svg>
+    ),
+  },
+  {
+    href: "/admin/engines",
+    label: "Engines",
+    icon: (
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+      </svg>
+    ),
+  },
+  {
+    href: "/admin/materials",
+    label: "Study Material",
+    icon: (
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+      </svg>
+    ),
+  },
+  {
+    href: "/admin/announcements",
+    label: "Updates",
+    icon: (
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d="M3 11l18-5v12L3 14v-3z" />
+        <path d="M11.6 16.8a3 3 0 1 1-5.8-1.6" />
+      </svg>
+    ),
+  },
 ];
 
 const COLLAPSED_KEY = "mbi-admin-sidebar-collapsed";
@@ -217,6 +312,33 @@ export default function AdminShell({
 
         {/* Nav */}
         <nav className="flex-1 px-2 py-4 space-y-1 overflow-y-auto">
+          {/* Desktop collapse toggle */}
+          <button
+            type="button"
+            onClick={toggle}
+            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+            title={collapsed ? "Expand" : "Collapse"}
+            className={[
+              "hidden md:flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-xs text-muted hover:bg-cream hover:text-ink transition",
+              collapsed ? "justify-center" : "",
+            ].join(" ")}
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              style={{ transform: collapsed ? "rotate(180deg)" : "none" }}
+            >
+              <polyline points="15 18 9 12 15 6" />
+            </svg>
+            {!collapsed && <span>Collapse</span>}
+          </button>
+
           {NAV.map((item) => {
             const active =
               pathname === item.href || pathname.startsWith(item.href + "/");
@@ -239,25 +361,6 @@ export default function AdminShell({
             );
           })}
 
-          <a
-            href="/"
-            target="_blank"
-            rel="noopener noreferrer"
-            title="View site"
-            className={[
-              "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-muted hover:bg-cream hover:text-ink transition",
-              collapsed && !mobileOpen ? "justify-center" : "",
-            ].join(" ")}
-          >
-            <span className="shrink-0">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                <polyline points="15 3 21 3 21 9" />
-                <line x1="10" y1="14" x2="21" y2="3" />
-              </svg>
-            </span>
-            {(!collapsed || mobileOpen) && <span>View site</span>}
-          </a>
         </nav>
 
         {/* Footer: user + sign out + collapse */}
@@ -291,32 +394,6 @@ export default function AdminShell({
               {(!collapsed || mobileOpen) && <span>Sign out</span>}
             </button>
           </form>
-          {/* Desktop collapse toggle */}
-          <button
-            type="button"
-            onClick={toggle}
-            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-            title={collapsed ? "Expand" : "Collapse"}
-            className={[
-              "hidden md:flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-xs text-muted hover:bg-cream hover:text-ink transition",
-              collapsed ? "justify-center" : "",
-            ].join(" ")}
-          >
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              style={{ transform: collapsed ? "rotate(180deg)" : "none" }}
-            >
-              <polyline points="15 18 9 12 15 6" />
-            </svg>
-            {!collapsed && <span>Collapse</span>}
-          </button>
           {/* Mobile close */}
           <button
             type="button"

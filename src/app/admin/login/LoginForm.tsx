@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import { signInWithPassword } from "@/app/actions/auth";
 import { supabaseBrowser } from "@/lib/supabase/browser";
 import { useRouter } from "next/navigation";
+import PasswordInput from "@/components/PasswordInput";
 
 export default function LoginForm({
   initialError,
@@ -92,14 +93,7 @@ export default function LoginForm({
         </div>
         <div>
           <label className="text-sm">Password</label>
-          <input
-            name="password"
-            type="password"
-            required
-            autoComplete="current-password"
-            className="mt-1 w-full bg-white border border-line rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-forest"
-            placeholder="••••••••"
-          />
+          <PasswordInput autoComplete="current-password" />
         </div>
 
         {error && (

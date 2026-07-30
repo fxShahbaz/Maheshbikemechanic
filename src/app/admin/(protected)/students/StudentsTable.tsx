@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { formatINR, type Admission } from "@/lib/types";
 import type { AdmissionWithPaid } from "@/app/actions/admissions";
 import AdmissionDrawer from "../admissions/AdmissionDrawer";
+import { ShowMoreButton, usePagination } from "@/components/pagination";
 
 type FeeFilter = "all" | "dues" | "paid" | "nopay";
 type SortKey = "due" | "paid" | "name" | "recent";
@@ -101,6 +102,12 @@ export default function StudentsTable({
     });
   }, [students, filter, batch, query, sort]);
 
+  const { paged, remaining, showMore } = usePagination(
+    visible,
+    20,
+    `${filter}|${batch}|${query}|${sort}`
+  );
+
   return (
     <>
       <div className="mt-6 md:mt-8 flex flex-col md:flex-row gap-3 md:items-center md:justify-between">
@@ -168,7 +175,7 @@ export default function StudentsTable({
           <Empty total={students.length} />
         ) : (
           <ul className="divide-y divide-line">
-            {visible.map((s) => {
+            {paged.map((s) => {
               const status = statusOf(s);
               const balance = balanceOf(s);
               return (
@@ -224,7 +231,7 @@ export default function StudentsTable({
                 </tr>
               </thead>
               <tbody className="divide-y divide-line">
-                {visible.map((s) => {
+                {paged.map((s) => {
                   const status = statusOf(s);
                   const balance = balanceOf(s);
                   return (
@@ -275,6 +282,8 @@ export default function StudentsTable({
           </div>
         )}
       </div>
+
+      <ShowMoreButton remaining={remaining} onShowMore={showMore} />
 
       <AdmissionDrawer admission={selected} onClose={() => setSelected(null)} />
     </>

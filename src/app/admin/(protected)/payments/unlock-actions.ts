@@ -1,7 +1,6 @@
 "use server";
 
-import { supabaseServer } from "@/lib/supabase/server";
-import { isAdminEmail } from "@/lib/types";
+import { requireAdmin } from "@/lib/auth";
 import {
   clearPaymentsUnlock,
   setPaymentsUnlocked,
@@ -10,14 +9,6 @@ import {
 import { revalidatePath } from "next/cache";
 
 type UnlockResult = { ok: true } | { ok: false; error: string };
-
-async function requireAdmin() {
-  const supabase = await supabaseServer();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user || !isAdminEmail(user.email)) {
-    throw new Error("Unauthorized");
-  }
-}
 
 export async function unlockPayments(formData: FormData): Promise<UnlockResult> {
   await requireAdmin();

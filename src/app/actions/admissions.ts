@@ -1,19 +1,8 @@
 "use server";
 
+import { requireAdmin } from "@/lib/auth";
 import { supabaseAdmin } from "@/lib/supabase/admin";
-import { supabaseServer } from "@/lib/supabase/server";
-import { isAdminEmail } from "@/lib/types";
 import { revalidatePath } from "next/cache";
-
-async function requireAdmin() {
-  const supabase = await supabaseServer();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user || !isAdminEmail(user.email)) {
-    throw new Error("Unauthorized");
-  }
-}
 
 function normalisePhone(input: string): string | null {
   const digits = input.replace(/\D/g, "");

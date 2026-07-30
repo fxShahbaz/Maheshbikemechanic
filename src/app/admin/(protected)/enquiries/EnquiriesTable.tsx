@@ -10,6 +10,7 @@ import {
 import EnquiryDrawer from "./EnquiryDrawer";
 import NewEnquiryDialog from "./NewEnquiryDialog";
 import BoardView from "./BoardView";
+import { ShowMoreButton, usePagination } from "@/components/pagination";
 
 type ViewMode = "table" | "board";
 const VIEW_KEY = "mbi-admin-enquiries-view";
@@ -69,6 +70,13 @@ export default function EnquiriesTable({
       (e.interest ?? "").toLowerCase().includes(q)
     );
   });
+
+  // Board view shows the full set; the mobile list and desktop table page it
+  const { paged, remaining, showMore } = usePagination(
+    visible,
+    20,
+    `${filter}|${query}|${view}`
+  );
 
   return (
     <>
@@ -137,7 +145,7 @@ export default function EnquiriesTable({
           </div>
         ) : (
           <ul className="divide-y divide-line">
-            {visible.map((e) => (
+            {paged.map((e) => (
               <li
                 key={e.id}
                 onClick={() => setSelected(e)}
@@ -246,7 +254,7 @@ export default function EnquiriesTable({
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-line">
-                    {visible.map((e) => (
+                    {paged.map((e) => (
                       <tr
                         key={e.id}
                         onClick={() => setSelected(e)}
@@ -308,6 +316,13 @@ export default function EnquiriesTable({
           </div>
         )}
       </div>
+
+      {/* Board view renders every card, so hide the pager there on desktop */}
+      <ShowMoreButton
+        remaining={remaining}
+        onShowMore={showMore}
+        className={view === "board" ? "md:hidden" : ""}
+      />
 
       <EnquiryDrawer enquiry={selected} onClose={() => setSelected(null)} />
       <NewEnquiryDialog open={newOpen} onClose={() => setNewOpen(false)} />

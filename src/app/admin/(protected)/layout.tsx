@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { supabaseServer } from "@/lib/supabase/server";
+import { getAuthUser } from "@/lib/auth";
 import { isAdminEmail } from "@/lib/types";
 import { redirect } from "next/navigation";
 import { signOut } from "@/app/actions/auth";
@@ -19,10 +19,7 @@ export default async function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const supabase = await supabaseServer();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getAuthUser();
 
   if (!user) {
     redirect("/admin/login");

@@ -11,6 +11,7 @@ import {
 } from "@/lib/types";
 import type { PaymentRow } from "./page";
 import PaymentDetailDrawer from "./PaymentDetailDrawer";
+import { ShowMoreButton, usePagination } from "@/components/pagination";
 
 const MODE_STYLES: Record<PaymentMode, string> = {
   cash: "bg-amber-100 text-amber-900 border-amber-200",
@@ -43,6 +44,12 @@ export default function PaymentsView({ payments }: { payments: PaymentRow[] }) {
       (p.reference ?? "").toLowerCase().includes(q)
     );
   });
+
+  const { paged, remaining, showMore } = usePagination(
+    visible,
+    20,
+    `${mode}|${purpose}|${query}`
+  );
 
   return (
     <>
@@ -90,7 +97,7 @@ export default function PaymentsView({ payments }: { payments: PaymentRow[] }) {
           <Empty />
         ) : (
           <ul className="divide-y divide-line">
-            {visible.map((p) => (
+            {paged.map((p) => (
               <li
                 key={p.id}
                 onClick={() => setSelected(p)}
@@ -154,7 +161,7 @@ export default function PaymentsView({ payments }: { payments: PaymentRow[] }) {
                 </tr>
               </thead>
               <tbody className="divide-y divide-line">
-                {visible.map((p) => (
+                {paged.map((p) => (
                   <tr
                     key={p.id}
                     onClick={() => setSelected(p)}
@@ -207,6 +214,8 @@ export default function PaymentsView({ payments }: { payments: PaymentRow[] }) {
           </div>
         )}
       </div>
+
+      <ShowMoreButton remaining={remaining} onShowMore={showMore} />
 
       <PaymentDetailDrawer
         payment={selected}

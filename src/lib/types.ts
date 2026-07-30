@@ -148,6 +148,89 @@ export const FAMILY_RELATIONS = [
   "Other",
 ] as const;
 
+// ============== Student portal ==============
+
+export type StudentStatus = "pending" | "active" | "inactive";
+
+export type StudentProfile = {
+  id: string;
+  created_at: string;
+  user_id: string;
+  name: string;
+  email: string;
+  phone: string | null;
+  status: StudentStatus;
+  access_expires_at: string | null; // date YYYY-MM-DD
+  approved_at: string | null;
+  notes: string | null;
+};
+
+export type PracticeSession = {
+  id: string;
+  created_at: string;
+  student_id: string;
+  engine: string;
+  punched_in_at: string;
+  punched_out_at: string | null;
+  notes: string | null;
+};
+
+export type PracticeSessionWithStudent = PracticeSession & {
+  student: { id: string; name: string; email: string } | null;
+};
+
+export type StudyMaterial = {
+  id: string;
+  created_at: string;
+  title: string;
+  description: string | null;
+  storage_path: string;
+  file_size: number | null;
+  published: boolean;
+};
+
+export type Announcement = {
+  id: string;
+  created_at: string;
+  title: string;
+  body: string | null;
+  published: boolean;
+  pinned: boolean;
+};
+
+export type Engine = {
+  id: string;
+  created_at: string;
+  name: string;
+  brand: string | null;
+  active: boolean;
+  sort_order: number;
+};
+
+/** Today's date (YYYY-MM-DD) in India, where the institute operates. */
+export function todayIST(): string {
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Kolkata",
+  }).format(new Date());
+}
+
+/** Active status AND not past the expiry date (expiry day itself is valid). */
+export function hasActiveAccess(
+  profile: Pick<StudentProfile, "status" | "access_expires_at">
+): boolean {
+  if (profile.status !== "active") return false;
+  if (!profile.access_expires_at) return true;
+  return profile.access_expires_at >= todayIST();
+}
+
+export function formatDuration(ms: number): string {
+  const totalMinutes = Math.max(0, Math.floor(ms / 60000));
+  const h = Math.floor(totalMinutes / 60);
+  const m = totalMinutes % 60;
+  if (h === 0) return `${m}m`;
+  return `${h}h ${m}m`;
+}
+
 export function maskAadhar(aadhar: string | null): string {
   if (!aadhar) return "—";
   const digits = aadhar.replace(/\D/g, "");

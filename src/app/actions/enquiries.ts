@@ -1,8 +1,8 @@
 "use server";
 
+import { requireAdmin } from "@/lib/auth";
 import { supabaseAdmin } from "@/lib/supabase/admin";
-import { supabaseServer } from "@/lib/supabase/server";
-import { isAdminEmail, type EnquiryStatus } from "@/lib/types";
+import type { EnquiryStatus } from "@/lib/types";
 import { revalidatePath } from "next/cache";
 
 type SubmitResult = { ok: true } | { ok: false; error: string };
@@ -42,14 +42,6 @@ export async function submitEnquiry(formData: FormData): Promise<SubmitResult> {
   }
 
   return { ok: true };
-}
-
-async function requireAdmin() {
-  const supabase = await supabaseServer();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user || !isAdminEmail(user.email)) {
-    throw new Error("Unauthorized");
-  }
 }
 
 export async function updateEnquiryStatus(id: string, status: EnquiryStatus) {

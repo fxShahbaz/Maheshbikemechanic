@@ -5,10 +5,12 @@ import {
   DragOverlay,
   KeyboardSensor,
   PointerSensor,
-  closestCenter,
+  pointerWithin,
+  rectIntersection,
   useDroppable,
   useSensor,
   useSensors,
+  type CollisionDetection,
   type DragEndEvent,
   type DragStartEvent,
 } from "@dnd-kit/core";
@@ -67,6 +69,18 @@ const COLUMNS: {
 type Props = {
   enquiries: Enquiry[];
   onSelect: (enquiry: Enquiry) => void;
+};
+
+/**
+ * Grid columns all stretch to the tallest column's height, so with one long
+ * column the empty columns' centers sit far below the pointer and
+ * closestCenter never picks them. Resolve by what's under the pointer
+ * instead, falling back to rect overlap mid-animation.
+ */
+const collideAtPointer: CollisionDetection = (args) => {
+  const atPointer = pointerWithin(args);
+  if (atPointer.length > 0) return atPointer;
+  return rectIntersection(args);
 };
 
 export default function BoardView({ enquiries, onSelect }: Props) {
@@ -140,7 +154,7 @@ export default function BoardView({ enquiries, onSelect }: Props) {
   return (
     <DndContext
       sensors={sensors}
-      collisionDetection={closestCenter}
+      collisionDetection={collideAtPointer}
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >

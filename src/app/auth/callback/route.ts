@@ -4,7 +4,15 @@ import { NextResponse } from "next/server";
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
-  const next = searchParams.get("next") ?? "/admin/enquiries";
+  const rawNext = searchParams.get("next") ?? "/admin/enquiries";
+  // Same-site paths only — never redirect to an external URL
+  const next =
+    rawNext.startsWith("/") && !rawNext.startsWith("//")
+      ? rawNext
+      : "/admin/enquiries";
+  const loginPath = next.startsWith("/student")
+    ? "/student/login"
+    : "/admin/login";
 
   if (code) {
     const supabase = await supabaseServer();
@@ -13,11 +21,11 @@ export async function GET(request: Request) {
       return NextResponse.redirect(`${origin}${next}`);
     }
     return NextResponse.redirect(
-      `${origin}/admin/login?error=${encodeURIComponent(error.message)}`
+      `${origin}${loginPath}?error=${encodeURIComponent(error.message)}`
     );
   }
 
   return NextResponse.redirect(
-    `${origin}/admin/login?error=${encodeURIComponent("Missing auth code.")}`
+    `${origin}${loginPath}?error=${encodeURIComponent("Missing auth code.")}`
   );
 }

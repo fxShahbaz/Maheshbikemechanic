@@ -5,6 +5,7 @@ import { formatINR, maskAadhar, type Admission } from "@/lib/types";
 import type { AdmissionWithPaid } from "@/app/actions/admissions";
 import AdmissionDrawer from "./AdmissionDrawer";
 import NewAdmissionDialog from "./NewAdmissionDialog";
+import { ShowMoreButton, usePagination } from "@/components/pagination";
 
 type BatchFilter = "all" | string;
 
@@ -32,6 +33,12 @@ export default function AdmissionsTable({
       (a.address ?? "").toLowerCase().includes(q)
     );
   });
+
+  const { paged, remaining, showMore } = usePagination(
+    visible,
+    20,
+    `${filter}|${query}`
+  );
 
   return (
     <>
@@ -78,7 +85,7 @@ export default function AdmissionsTable({
           <Empty total={admissions.length} />
         ) : (
           <ul className="divide-y divide-line">
-            {visible.map((a) => (
+            {paged.map((a) => (
               <li
                 key={a.id}
                 onClick={() => setSelected(a)}
@@ -179,7 +186,7 @@ export default function AdmissionsTable({
                 </tr>
               </thead>
               <tbody className="divide-y divide-line">
-                {visible.map((a) => (
+                {paged.map((a) => (
                   <tr
                     key={a.id}
                     onClick={() => setSelected(a)}
@@ -273,6 +280,8 @@ export default function AdmissionsTable({
           </div>
         )}
       </div>
+
+      <ShowMoreButton remaining={remaining} onShowMore={showMore} />
 
       <AdmissionDrawer
         admission={selected}
