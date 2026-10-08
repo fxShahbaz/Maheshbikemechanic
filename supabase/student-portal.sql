@@ -93,3 +93,13 @@ grant all on public.payments          to service_role;
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
 values ('study-materials', 'study-materials', false, 52428800, array['application/pdf'])
 on conflict (id) do nothing;
+
+-- Announcement audience: empty array = all students, otherwise only
+-- students whose admission batch_no is in the list.
+alter table public.announcements
+  add column if not exists batches text[] not null default '{}';
+
+-- Batch assigned when approving portal access. Used for announcement
+-- targeting; falls back to the linked admission's batch_no when empty.
+alter table public.student_profiles
+  add column if not exists batch_no text;

@@ -163,6 +163,7 @@ export type StudentProfile = {
   access_expires_at: string | null; // date YYYY-MM-DD
   approved_at: string | null;
   notes: string | null;
+  batch_no: string | null;
 };
 
 export type PracticeSession = {
@@ -196,6 +197,8 @@ export type Announcement = {
   body: string | null;
   published: boolean;
   pinned: boolean;
+  /** Target batches; empty = all students. */
+  batches: string[];
 };
 
 export type Engine = {

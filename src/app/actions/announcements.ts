@@ -11,7 +11,15 @@ type AnnouncementInput = {
   body?: string | null;
   published?: boolean;
   pinned?: boolean;
+  /** Target batches; empty = all students. */
+  batches?: string[];
 };
+
+function cleanBatches(batches: string[] | undefined): string[] {
+  return Array.from(
+    new Set((batches ?? []).map((b) => b.trim()).filter(Boolean))
+  );
+}
 
 function revalidateAnnouncements() {
   revalidatePath("/admin/announcements");
@@ -32,6 +40,7 @@ export async function createAnnouncement(
     body: input.body?.trim() || null,
     published: input.published ?? true,
     pinned: input.pinned ?? false,
+    batches: cleanBatches(input.batches),
   });
   if (error) return { ok: false, error: error.message };
 
@@ -56,6 +65,9 @@ export async function updateAnnouncement(
       body: input.body?.trim() || null,
       published: input.published ?? true,
       pinned: input.pinned ?? false,
+      ...(input.batches !== undefined && {
+        batches: cleanBatches(input.batches),
+      }),
     })
     .eq("id", id);
   if (error) return { ok: false, error: error.message };

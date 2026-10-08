@@ -90,7 +90,7 @@ export default function PdfViewer({
 
   return (
     <div
-      className="mt-6 relative select-none print:hidden"
+      className="relative select-none print:hidden"
       onContextMenu={(e) => e.preventDefault()}
     >
       {state === "loading" && (

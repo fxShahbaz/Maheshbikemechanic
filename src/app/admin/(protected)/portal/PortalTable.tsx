@@ -14,6 +14,13 @@ import { ShowMoreButton, usePagination } from "@/components/pagination";
 
 type Filter = "all" | "pending" | "active" | "expired" | "inactive";
 
+/** Portal account plus the batch_no of its linked admission, if any. */
+export type PortalAccount = StudentProfile & { admission_batch: string | null };
+
+function batchOf(a: PortalAccount): string | null {
+  return a.batch_no || a.admission_batch;
+}
+
 function defaultExpiry(): string {
   const d = new Date();
   d.setMonth(d.getMonth() + 3);
@@ -48,8 +55,10 @@ function formatDateOnly(iso: string): string {
 
 export default function PortalTable({
   accounts,
+  batches,
 }: {
-  accounts: StudentProfile[];
+  accounts: PortalAccount[];
+  batches: string[];
 }) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
@@ -59,6 +68,7 @@ export default function PortalTable({
   // Row currently showing the approve/extend date picker, and its draft date
   const [dateRow, setDateRow] = useState<string | null>(null);
   const [draftDate, setDraftDate] = useState(defaultExpiry());
+  const [draftBatch, setDraftBatch] = useState("");
   const [confirmDeleteRow, setConfirmDeleteRow] = useState<string | null>(null);
 
   const counts = useMemo(() => {
@@ -90,7 +100,8 @@ export default function PortalTable({
       return (
         a.name.toLowerCase().includes(q) ||
         a.email.toLowerCase().includes(q) ||
-        (a.phone ?? "").toLowerCase().includes(q)
+        (a.phone ?? "").toLowerCase().includes(q) ||
+        (batchOf(a) ?? "").toLowerCase().includes(q)
       );
     });
   }, [accounts, filter, search]);
@@ -114,18 +125,19 @@ export default function PortalTable({
     });
   }
 
-  function openDatePicker(a: StudentProfile) {
+  function openDatePicker(a: PortalAccount) {
     setDateRow(a.id);
+    setDraftBatch(batchOf(a) ?? "");
     setDraftDate(
       hasActiveAccess(a) ? (a.access_expires_at ?? defaultExpiry()) : defaultExpiry()
     );
   }
 
-  function confirmDate(a: StudentProfile) {
+  function confirmDate(a: PortalAccount) {
     run(() =>
       a.status === "active" && hasActiveAccess(a)
-        ? updateStudentExpiry(a.id, draftDate)
-        : approveStudent(a.id, draftDate)
+        ? updateStudentExpiry(a.id, draftDate, draftBatch)
+        : approveStudent(a.id, draftDate, draftBatch)
     );
   }
 
@@ -161,7 +173,7 @@ export default function PortalTable({
           type="search"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search name / email / phone..."
+          placeholder="Search name / email / phone / batch..."
           className="w-full md:w-64 bg-white border border-line rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-forest"
         />
       </div>
@@ -194,7 +206,8 @@ export default function PortalTable({
                     </div>
                     <StatusPill {...b} />
                   </div>
-                  <div className="mt-3 grid grid-cols-2 gap-2 text-xs">
+                  <div className="mt-3 grid grid-cols-3 gap-2 text-xs">
+                    <Cell label="Batch" value={batchOf(a) ?? "—"} />
                     <Cell label="Joined" value={formatDate(a.created_at)} />
                     <Cell
                       label="Access till"
@@ -213,6 +226,9 @@ export default function PortalTable({
                       confirmingDelete={confirmDeleteRow === a.id}
                       draftDate={draftDate}
                       setDraftDate={setDraftDate}
+                      draftBatch={draftBatch}
+                      setDraftBatch={setDraftBatch}
+                      batches={batches}
                       onOpenDate={() => openDatePicker(a)}
                       onConfirmDate={() => confirmDate(a)}
                       onCancelDate={() => setDateRow(null)}
@@ -240,6 +256,7 @@ export default function PortalTable({
                 <tr>
                   <th className="px-5 py-3 font-medium">Student</th>
                   <th className="px-5 py-3 font-medium">Phone</th>
+                  <th className="px-5 py-3 font-medium">Batch</th>
                   <th className="px-5 py-3 font-medium">Status</th>
                   <th className="px-5 py-3 font-medium whitespace-nowrap">Joined</th>
                   <th className="px-5 py-3 font-medium whitespace-nowrap">
@@ -259,6 +276,15 @@ export default function PortalTable({
                       </td>
                       <td className="px-5 py-4 text-muted whitespace-nowrap">
                         {a.phone ?? "—"}
+                      </td>
+                      <td className="px-5 py-4 whitespace-nowrap">
+                        {batchOf(a) ? (
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] border border-forest/20 bg-forest/5 text-forest font-medium">
+                            Batch {batchOf(a)}
+                          </span>
+                        ) : (
+                          <span className="text-muted">—</span>
+                        )}
                       </td>
                       <td className="px-5 py-4">
                         <StatusPill {...b} />
@@ -284,6 +310,9 @@ export default function PortalTable({
                             confirmingDelete={confirmDeleteRow === a.id}
                             draftDate={draftDate}
                             setDraftDate={setDraftDate}
+                            draftBatch={draftBatch}
+                            setDraftBatch={setDraftBatch}
+                            batches={batches}
                             onOpenDate={() => openDatePicker(a)}
                             onConfirmDate={() => confirmDate(a)}
                             onCancelDate={() => setDateRow(null)}
@@ -319,6 +348,9 @@ function RowActions({
   confirmingDelete,
   draftDate,
   setDraftDate,
+  draftBatch,
+  setDraftBatch,
+  batches,
   onOpenDate,
   onConfirmDate,
   onCancelDate,
@@ -327,12 +359,15 @@ function RowActions({
   onConfirmDelete,
   onCancelDelete,
 }: {
-  a: StudentProfile;
+  a: PortalAccount;
   pending: boolean;
   showDate: boolean;
   confirmingDelete: boolean;
   draftDate: string;
   setDraftDate: (v: string) => void;
+  draftBatch: string;
+  setDraftBatch: (v: string) => void;
+  batches: string[];
   onOpenDate: () => void;
   onConfirmDate: () => void;
   onCancelDate: () => void;
@@ -342,15 +377,35 @@ function RowActions({
   onCancelDelete: () => void;
 }) {
   if (showDate) {
+    const listId = `batches-${a.id}`;
     return (
       <>
-        <input
-          type="date"
-          value={draftDate}
-          min={todayIST()}
-          onChange={(e) => setDraftDate(e.target.value)}
-          className="bg-white border border-line rounded-xl px-3 py-1.5 text-sm focus:outline-none focus:border-forest"
-        />
+        <label className="flex items-center gap-1.5 text-xs text-muted">
+          Batch
+          <input
+            type="text"
+            list={listId}
+            value={draftBatch}
+            onChange={(e) => setDraftBatch(e.target.value)}
+            placeholder="e.g. 28"
+            className="w-24 bg-white border border-line rounded-xl px-3 py-1.5 text-sm text-ink focus:outline-none focus:border-forest"
+          />
+          <datalist id={listId}>
+            {batches.map((b) => (
+              <option key={b} value={b} />
+            ))}
+          </datalist>
+        </label>
+        <label className="flex items-center gap-1.5 text-xs text-muted">
+          Till
+          <input
+            type="date"
+            value={draftDate}
+            min={todayIST()}
+            onChange={(e) => setDraftDate(e.target.value)}
+            className="bg-white border border-line rounded-xl px-3 py-1.5 text-sm text-ink focus:outline-none focus:border-forest"
+          />
+        </label>
         <button
           type="button"
           disabled={pending || !draftDate}
@@ -401,7 +456,7 @@ function RowActions({
             onClick={onOpenDate}
             className="px-4 py-1.5 rounded-full text-sm border border-line hover:bg-cream transition"
           >
-            Change expiry
+            Edit access
           </button>
           <button
             type="button"

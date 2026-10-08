@@ -17,7 +17,8 @@ function revalidatePortal() {
 /** Approve (or re-approve) a student. Access always gets an expiry date. */
 export async function approveStudent(
   id: string,
-  expiresOn: string
+  expiresOn: string,
+  batchNo?: string | null
 ): Promise<Result> {
   await requireAdmin();
   if (!DATE_RE.test(expiresOn)) {
@@ -31,6 +32,7 @@ export async function approveStudent(
       status: "active",
       access_expires_at: expiresOn,
       approved_at: new Date().toISOString(),
+      batch_no: batchNo?.trim() || null,
     })
     .eq("id", id);
   if (error) return { ok: false, error: error.message };
@@ -58,7 +60,8 @@ export async function setStudentStatus(
 
 export async function updateStudentExpiry(
   id: string,
-  expiresOn: string
+  expiresOn: string,
+  batchNo?: string | null
 ): Promise<Result> {
   await requireAdmin();
   if (!DATE_RE.test(expiresOn)) {
@@ -68,7 +71,7 @@ export async function updateStudentExpiry(
   const supabase = supabaseAdmin();
   const { error } = await supabase
     .from("student_profiles")
-    .update({ access_expires_at: expiresOn })
+    .update({ access_expires_at: expiresOn, batch_no: batchNo?.trim() || null })
     .eq("id", id);
   if (error) return { ok: false, error: error.message };
 

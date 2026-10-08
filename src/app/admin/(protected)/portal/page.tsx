@@ -1,18 +1,34 @@
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { hasActiveAccess } from "@/lib/types";
-import type { StudentProfile } from "@/lib/types";
+import type { Admission, StudentProfile } from "@/lib/types";
+import { matchAdmission, sortBatches } from "@/lib/student-admission";
 import PortalTable from "./PortalTable";
 
 export const dynamic = "force-dynamic";
 
 export default async function PortalPage() {
   const supabase = supabaseAdmin();
-  const { data } = await supabase
-    .from("student_profiles")
-    .select("*")
-    .order("created_at", { ascending: false });
+  const [{ data }, { data: admissionRows }] = await Promise.all([
+    supabase
+      .from("student_profiles")
+      .select("*")
+      .order("created_at", { ascending: false }),
+    supabase.from("admissions").select("email, phone, batch_no"),
+  ]);
 
-  const accounts = (data ?? []) as StudentProfile[];
+  const admissions = (admissionRows ?? []) as Pick<
+    Admission,
+    "email" | "phone" | "batch_no"
+  >[];
+  // Fall back to the linked admission's batch so approval is pre-filled
+  const accounts = ((data ?? []) as StudentProfile[]).map((a) => ({
+    ...a,
+    admission_batch: matchAdmission(a, admissions)?.batch_no?.trim() || null,
+  }));
+  const batches = sortBatches([
+    ...admissions.map((a) => a.batch_no),
+    ...accounts.map((a) => a.batch_no),
+  ]);
 
   const pending = accounts.filter((a) => a.status === "pending").length;
   const active = accounts.filter((a) => hasActiveAccess(a)).length;
@@ -38,7 +54,7 @@ export default async function PortalPage() {
         <Kpi label="Inactive" value={String(inactive)} />
       </div>
 
-      <PortalTable accounts={accounts} />
+      <PortalTable accounts={accounts} batches={batches} />
     </main>
   );
 }

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { redirect } from "next/navigation";
 import { getAuthUser, getStudentProfile } from "@/lib/auth";
 import { hasActiveAccess, isAdminEmail } from "@/lib/types";
@@ -12,6 +12,14 @@ export const metadata: Metadata = {
     follow: false,
     googleBot: { index: false, follow: false },
   },
+};
+
+// Edge-to-edge on notched phones; the shell pads with safe-area insets.
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: "#f3f1ea",
 };
 
 export default async function StudentPortalLayout({

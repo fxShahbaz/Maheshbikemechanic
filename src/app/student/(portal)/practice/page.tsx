@@ -2,6 +2,7 @@ import { getStudentProfile } from "@/lib/auth";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import type { PracticeSession } from "@/lib/types";
 import PracticePanel from "./PracticePanel";
+import { PageHeader } from "../_components/ui";
 
 export const dynamic = "force-dynamic";
 
@@ -30,15 +31,10 @@ export default async function PracticePage() {
 
   return (
     <>
-      <div>
-        <p className="text-sm font-medium text-forest">
-          Hi {profile.name.split(" ")[0]} 👋
-        </p>
-        <h1 className="font-display text-3xl md:text-4xl mt-1">Practice</h1>
-        <p className="text-muted text-sm mt-1">
-          Punch in when you start on an engine, punch out when you finish.
-        </p>
-      </div>
+      <PageHeader
+        eyebrow={`Hi ${profile.name.split(" ")[0]} 👋`}
+        title="Practice"
+      />
       <PracticePanel sessions={sessions} engines={engines} />
     </>
   );
