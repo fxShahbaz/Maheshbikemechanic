@@ -1,8 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getStudentProfile } from "@/lib/auth";
-import { supabaseAdmin } from "@/lib/supabase/admin";
-import type { StudyMaterial } from "@/lib/types";
+import { getMaterial } from "@/lib/student-portal";
 import PdfViewer from "./PdfViewer";
 
 export const dynamic = "force-dynamic";
@@ -14,16 +13,8 @@ export default async function MaterialViewerPage({
   const profile = await getStudentProfile();
   if (!profile) return null; // layout guard already redirects
 
-  const supabase = supabaseAdmin();
-  const { data } = await supabase
-    .from("study_materials")
-    .select("*")
-    .eq("id", id)
-    .eq("published", true)
-    .maybeSingle();
-  if (!data) notFound();
-
-  const material = data as StudyMaterial;
+  const material = await getMaterial(id);
+  if (!material) notFound();
 
   return (
     <>

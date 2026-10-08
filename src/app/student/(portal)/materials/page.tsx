@@ -1,19 +1,11 @@
-import { supabaseAdmin } from "@/lib/supabase/admin";
-import type { StudyMaterial } from "@/lib/types";
+import { listMaterials } from "@/lib/student-portal";
 import MaterialsGrid from "./MaterialsGrid";
 import { EmptyState, PageHeader } from "../_components/ui";
 
 export const dynamic = "force-dynamic";
 
 export default async function MaterialsPage() {
-  const supabase = supabaseAdmin();
-  const { data } = await supabase
-    .from("study_materials")
-    .select("*")
-    .eq("published", true)
-    .order("created_at", { ascending: false });
-
-  const materials = (data ?? []) as StudyMaterial[];
+  const materials = await listMaterials();
 
   return (
     <>

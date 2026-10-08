@@ -2,18 +2,10 @@
 
 import { useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
-import type { Announcement } from "@/lib/types";
+import type { FeedPost } from "@/lib/student-portal";
 import { SITE_NAME } from "@/lib/site";
 import { usePagination } from "@/components/pagination";
 import { formatPostTime } from "../_components/ui";
-
-export type FeedPost = Announcement & {
-  isNew: boolean;
-  /** Relative time ("3h", "2d"); null once older than a week. */
-  ago: string | null;
-  /** "Batch 28" when targeted at the student's batch; null = everyone. */
-  audience: string | null;
-};
 
 const svg = {
   viewBox: "0 0 24 24",

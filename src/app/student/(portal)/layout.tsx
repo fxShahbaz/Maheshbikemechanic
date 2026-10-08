@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { getAuthUser, getStudentProfile } from "@/lib/auth";
 import { hasActiveAccess, isAdminEmail } from "@/lib/types";
 import { signOutStudent } from "@/app/actions/student-auth";
+import { accessLock } from "@/lib/student-portal";
 import StudentShell from "./StudentShell";
 
 export const metadata: Metadata = {
@@ -41,20 +42,7 @@ export default async function StudentPortalLayout({
   }
 
   if (!hasActiveAccess(profile)) {
-    const expired =
-      profile.status === "active" && profile.access_expires_at != null;
-    const heading =
-      profile.status === "pending"
-        ? "Awaiting approval"
-        : expired
-          ? "Access expired"
-          : "Access deactivated";
-    const message =
-      profile.status === "pending"
-        ? "Your account has been created. The institute will review and approve your access soon — check back here or contact the office."
-        : expired
-          ? `Your portal access ended on ${profile.access_expires_at}. Contact the institute to extend it.`
-          : "Your portal access has been turned off. Contact the institute if you think this is a mistake.";
+    const { heading, message } = accessLock(profile);
 
     return (
       <main className="min-h-screen flex items-center justify-center px-4 bg-cream">

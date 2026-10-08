@@ -2,52 +2,19 @@
 
 import { requireActiveStudent, requireAdmin } from "@/lib/auth";
 import { supabaseAdmin } from "@/lib/supabase/admin";
+import { endPractice, startPractice } from "@/lib/student-portal";
 import { revalidatePath } from "next/cache";
 
 type Result = { ok: true } | { ok: false; error: string };
 
 export async function punchIn(formData: FormData): Promise<Result> {
   const profile = await requireActiveStudent();
-
-  const engine = String(formData.get("engine") ?? "").trim();
-  const notes = String(formData.get("notes") ?? "").trim();
-  if (!engine) return { ok: false, error: "Enter the engine number / name." };
-
-  const supabase = supabaseAdmin();
-
-  // When the admin has defined an engine list, the punch-in must be one of
-  // the active engines; free text is only allowed while the list is empty.
-  const { count: engineCount } = await supabase
-    .from("engines")
-    .select("id", { count: "exact", head: true });
-  if ((engineCount ?? 0) > 0) {
-    const { data: match } = await supabase
-      .from("engines")
-      .select("id")
-      .eq("name", engine)
-      .eq("active", true)
-      .maybeSingle();
-    if (!match) {
-      return { ok: false, error: "Select an engine from the list." };
-    }
-  }
-
-  const { data: open } = await supabase
-    .from("practice_sessions")
-    .select("id")
-    .eq("student_id", profile.id)
-    .is("punched_out_at", null)
-    .limit(1);
-  if (open && open.length > 0) {
-    return { ok: false, error: "You already have an open session. Punch out first." };
-  }
-
-  const { error } = await supabase.from("practice_sessions").insert({
-    student_id: profile.id,
-    engine,
-    notes: notes || null,
-  });
-  if (error) return { ok: false, error: error.message };
+  const result = await startPractice(
+    profile,
+    String(formData.get("engine") ?? ""),
+    String(formData.get("notes") ?? "")
+  );
+  if (!result.ok) return result;
 
   revalidatePath("/student/practice");
   revalidatePath("/admin/practice");
@@ -56,20 +23,8 @@ export async function punchIn(formData: FormData): Promise<Result> {
 
 export async function punchOut(sessionId: string): Promise<Result> {
   const profile = await requireActiveStudent();
-
-  const supabase = supabaseAdmin();
-  const { data, error } = await supabase
-    .from("practice_sessions")
-    .update({ punched_out_at: new Date().toISOString() })
-    .eq("id", sessionId)
-    .eq("student_id", profile.id)
-    .is("punched_out_at", null)
-    .select("id");
-
-  if (error) return { ok: false, error: error.message };
-  if (!data || data.length === 0) {
-    return { ok: false, error: "Session not found or already punched out." };
-  }
+  const result = await endPractice(profile, sessionId);
+  if (!result.ok) return result;
 
   revalidatePath("/student/practice");
   revalidatePath("/admin/practice");

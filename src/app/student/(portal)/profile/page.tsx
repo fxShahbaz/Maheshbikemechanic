@@ -1,13 +1,11 @@
 import { getStudentProfile } from "@/lib/auth";
-import { findStudentAdmission } from "@/lib/student-admission";
-import { supabaseAdmin } from "@/lib/supabase/admin";
+import { getProfileDetails } from "@/lib/student-portal";
 import { signOutStudent } from "@/app/actions/student-auth";
 import { Group, InfoRow, SectionLabel } from "../_components/ui";
 import {
   formatINR,
   hasActiveAccess,
   maskAadhar,
-  type Payment,
 } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -32,29 +30,12 @@ export default async function ProfilePage() {
   const profile = await getStudentProfile();
   if (!profile) return null; // layout guard already redirects
 
-  const supabase = supabaseAdmin();
-  const admission = await findStudentAdmission(profile);
-
-  let paid = 0;
-  if (admission) {
-    const { data: payments } = await supabase
-      .from("payments")
-      .select("amount")
-      .eq("admission_id", admission.id);
-    paid = ((payments ?? []) as Pick<Payment, "amount">[]).reduce(
-      (sum, p) => sum + (Number(p.amount) || 0),
-      0
-    );
-  }
+  const { admission, fees } = await getProfileDetails(profile);
+  const paid = fees?.paid ?? 0;
+  const due = fees?.due ?? null;
+  const pct = fees?.pct ?? null;
 
   const active = hasActiveAccess(profile);
-  const due =
-    admission?.total_fee != null ? Math.max(0, admission.total_fee - paid) : null;
-  const pct =
-    admission?.total_fee != null && admission.total_fee > 0
-      ? Math.min(100, Math.round((paid / admission.total_fee) * 100))
-      : null;
-
   const statusLabel = active
     ? "Active"
     : profile.status === "pending"

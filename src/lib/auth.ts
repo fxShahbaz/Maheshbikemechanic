@@ -32,7 +32,16 @@ export async function requireAdmin(): Promise<User> {
 export const getStudentProfile = cache(async (): Promise<StudentProfile | null> => {
   const user = await getAuthUser();
   if (!user || isAdminEmail(user.email)) return null;
+  return loadStudentProfile(user);
+});
 
+/**
+ * Same as getStudentProfile but for an already-resolved user — used by the
+ * mobile API, which authenticates with a Bearer token instead of cookies.
+ */
+export async function loadStudentProfile(
+  user: User
+): Promise<StudentProfile | null> {
   const admin = supabaseAdmin();
   const { data } = await admin
     .from("student_profiles")
@@ -55,7 +64,7 @@ export const getStudentProfile = cache(async (): Promise<StudentProfile | null> 
     .select("*")
     .single();
   return (created as StudentProfile) ?? null;
-});
+}
 
 /** Signed in, approved and not expired — the only state allowed past the portal gate. */
 export async function requireActiveStudent(): Promise<StudentProfile> {

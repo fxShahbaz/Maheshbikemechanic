@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useMemo, useOptimistic, useState, useTransition } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { punchIn, punchOut } from "@/app/actions/practice";
 import { formatDuration } from "@/lib/types";
@@ -67,15 +66,31 @@ const WrenchIcon = ({ size = 20 }: { size?: number }) => (
   </svg>
 );
 
+type OptimisticAction =
+  | { type: "in"; session: PracticeSession }
+  | { type: "out"; id: string; at: string };
+
+const TEMP_ID = "optimistic";
+
 export default function PracticePanel({
-  sessions,
+  sessions: serverSessions,
   engines,
 }: {
   sessions: PracticeSession[];
   engines: EngineOption[];
 }) {
-  const router = useRouter();
   const [pending, startTransition] = useTransition();
+  // Punch in/out update the screen instantly; the action's response carries
+  // the revalidated page, which replaces this state when it lands.
+  const [sessions, applyOptimistic] = useOptimistic(
+    serverSessions,
+    (state, action: OptimisticAction) =>
+      action.type === "in"
+        ? [action.session, ...state]
+        : state.map((s) =>
+            s.id === action.id ? { ...s, punched_out_at: action.at } : s
+          )
+  );
   const [error, setError] = useState<string>();
   const [sheetOpen, setSheetOpen] = useState(false);
   const [visibleCount, setVisibleCount] = useState(15);
@@ -108,12 +123,28 @@ export default function PracticePanel({
 
   function handlePunchIn(formData: FormData) {
     setError(undefined);
+    setSheetOpen(false);
     startTransition(async () => {
-      const result = await punchIn(formData);
-      if (!result.ok) setError(result.error);
-      else {
-        setSheetOpen(false);
-        router.refresh();
+      const notes = String(formData.get("notes") ?? "").trim();
+      applyOptimistic({
+        type: "in",
+        session: {
+          id: TEMP_ID,
+          created_at: new Date().toISOString(),
+          student_id: "",
+          engine: String(formData.get("engine") ?? "").trim(),
+          punched_in_at: new Date().toISOString(),
+          punched_out_at: null,
+          notes: notes || null,
+        },
+      });
+      const result = await punchIn(formData).catch(() => ({
+        ok: false as const,
+        error: "Couldn't reach the server. Check your connection and try again.",
+      }));
+      if (!result.ok) {
+        setError(result.error);
+        setSheetOpen(true);
       }
     });
   }
@@ -121,9 +152,12 @@ export default function PracticePanel({
   function handlePunchOut(id: string) {
     setError(undefined);
     startTransition(async () => {
-      const result = await punchOut(id);
+      applyOptimistic({ type: "out", id, at: new Date().toISOString() });
+      const result = await punchOut(id).catch(() => ({
+        ok: false as const,
+        error: "Couldn't reach the server. Check your connection and try again.",
+      }));
       if (!result.ok) setError(result.error);
-      else router.refresh();
     });
   }
 
@@ -159,14 +193,15 @@ export default function PracticePanel({
 
           <button
             type="button"
-            disabled={pending}
+            // The optimistic session has no real id until the server replies
+            disabled={openSession.id === TEMP_ID}
             onClick={() => handlePunchOut(openSession.id)}
             className="w-full h-14 rounded-2xl bg-lime text-ink font-semibold text-base flex items-center justify-center gap-2 active:scale-[0.98] transition disabled:opacity-60"
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
               <rect x="6" y="6" width="12" height="12" rx="2" />
             </svg>
-            {pending ? "Punching out…" : "Punch out"}
+            Punch out
           </button>
         </section>
       ) : (
