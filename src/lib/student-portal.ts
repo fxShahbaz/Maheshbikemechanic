@@ -21,6 +21,7 @@ import type {
 type Result = { ok: true } | { ok: false; error: string };
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const DAY = 24 * 60 * 60 * 1000;
 
 export const MATERIALS_BUCKET = "study-materials";
@@ -197,6 +198,9 @@ export async function endPractice(
   profile: StudentProfile,
   sessionId: string
 ): Promise<Result> {
+  if (!UUID_RE.test(sessionId)) {
+    return { ok: false, error: "Session not found or already punched out." };
+  }
   const { data, error } = await supabaseAdmin()
     .from("practice_sessions")
     .update({ punched_out_at: new Date().toISOString() })
@@ -214,35 +218,78 @@ export async function endPractice(
 
 // ============== Study material ==============
 
-export async function listMaterials(): Promise<StudyMaterial[]> {
-  const { data } = await supabaseAdmin()
-    .from("study_materials")
-    .select("*")
-    .eq("published", true)
-    .order("created_at", { ascending: false });
-  return (data ?? []) as StudyMaterial[];
+/** The student's batch, skipping the admission lookup when it's on the profile. */
+async function resolveBatch(profile: StudentProfile): Promise<string | null> {
+  if (profile.batch_no?.trim()) return studentBatch(profile, null);
+  return studentBatch(profile, await findStudentAdmission(profile));
 }
 
-export async function getMaterial(id: string): Promise<StudyMaterial | null> {
+/** Empty batches = all students; otherwise only the listed batches. */
+function canSeeMaterial(
+  m: Pick<StudyMaterial, "batches">,
+  batch: string | null
+): boolean {
+  return !m.batches?.length || (batch !== null && m.batches.includes(batch));
+}
+
+/** Published material this student's batch may see, newest first. */
+export async function listMaterials(
+  profile: StudentProfile
+): Promise<StudyMaterial[]> {
+  const [{ data }, batch] = await Promise.all([
+    supabaseAdmin()
+      .from("study_materials")
+      .select("*")
+      .eq("published", true)
+      .order("created_at", { ascending: false }),
+    resolveBatch(profile),
+  ]);
+  return ((data ?? []) as StudyMaterial[]).filter((m) =>
+    canSeeMaterial(m, batch)
+  );
+}
+
+export async function getMaterial(
+  profile: StudentProfile,
+  id: string
+): Promise<StudyMaterial | null> {
+  if (!UUID_RE.test(id)) return null;
   const { data } = await supabaseAdmin()
     .from("study_materials")
     .select("*")
     .eq("id", id)
     .eq("published", true)
     .maybeSingle();
-  return (data as StudyMaterial) ?? null;
+  const material = (data as StudyMaterial | null) ?? null;
+  if (!material || !canSeeMaterial(material, await resolveBatch(profile))) {
+    return null;
+  }
+  return material;
 }
 
-/** Streams a material's PDF; never cached, inline only. */
+/**
+ * Streams a material's PDF; never cached, inline only. Admins see every
+ * file; a student only published files their batch may access.
+ */
 export async function materialFileResponse(
   id: string,
-  { includeUnpublished = false } = {}
+  viewer: StudentProfile | "admin"
 ): Promise<Response> {
+  if (!UUID_RE.test(id)) return new Response("Not found", { status: 404 });
   const supabase = supabaseAdmin();
-  let query = supabase.from("study_materials").select("storage_path").eq("id", id);
-  if (!includeUnpublished) query = query.eq("published", true);
+  let query = supabase
+    .from("study_materials")
+    .select("storage_path, batches")
+    .eq("id", id);
+  if (viewer !== "admin") query = query.eq("published", true);
   const { data: material } = await query.maybeSingle();
   if (!material) return new Response("Not found", { status: 404 });
+  if (
+    viewer !== "admin" &&
+    !canSeeMaterial(material, await resolveBatch(viewer))
+  ) {
+    return new Response("Not found", { status: 404 });
+  }
 
   const { data: blob, error } = await supabase.storage
     .from(MATERIALS_BUCKET)

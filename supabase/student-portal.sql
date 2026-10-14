@@ -103,3 +103,31 @@ alter table public.announcements
 -- targeting; falls back to the linked admission's batch_no when empty.
 alter table public.student_profiles
   add column if not exists batch_no text;
+
+-- Mobile app push: one row per device (Expo push token). A device that
+-- signs into another account moves to that student.
+create table if not exists public.push_tokens (
+  token      text        primary key,
+  student_id uuid        not null references public.student_profiles (id) on delete cascade,
+  platform   text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create index if not exists push_tokens_student_idx on public.push_tokens (student_id);
+
+alter table public.push_tokens enable row level security;
+revoke all on public.push_tokens from anon, authenticated;
+grant all on public.push_tokens to service_role;
+
+-- When the announcement was pushed to the app; null = not yet. Existing
+-- announcements count as already sent so editing them never re-notifies.
+alter table public.announcements
+  add column if not exists pushed_at timestamptz;
+update public.announcements set pushed_at = created_at where pushed_at is null;
+
+-- Study material category (free text, groups files in the portal) and
+-- audience: empty batches = all students, otherwise only those batches.
+alter table public.study_materials
+  add column if not exists category text,
+  add column if not exists batches text[] not null default '{}';

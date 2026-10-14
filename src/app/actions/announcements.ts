@@ -1,8 +1,10 @@
 "use server";
 
 import { requireAdmin } from "@/lib/auth";
+import { pushAnnouncement } from "@/lib/push";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { revalidatePath } from "next/cache";
+import { after } from "next/server";
 
 type Result = { ok: true } | { ok: false; error: string };
 
@@ -35,16 +37,22 @@ export async function createAnnouncement(
   if (!title) return { ok: false, error: "Title is required." };
 
   const supabase = supabaseAdmin();
-  const { error } = await supabase.from("announcements").insert({
-    title,
-    body: input.body?.trim() || null,
-    published: input.published ?? true,
-    pinned: input.pinned ?? false,
-    batches: cleanBatches(input.batches),
-  });
+  const { data, error } = await supabase
+    .from("announcements")
+    .insert({
+      title,
+      body: input.body?.trim() || null,
+      published: input.published ?? true,
+      pinned: input.pinned ?? false,
+      batches: cleanBatches(input.batches),
+    })
+    .select("id")
+    .single();
   if (error) return { ok: false, error: error.message };
 
   revalidateAnnouncements();
+  // Notify the targeted students' phones without holding up the admin
+  after(() => pushAnnouncement(data.id));
   return { ok: true };
 }
 
@@ -73,6 +81,8 @@ export async function updateAnnouncement(
   if (error) return { ok: false, error: error.message };
 
   revalidateAnnouncements();
+  // A draft published for the first time; no-op if it was already pushed
+  after(() => pushAnnouncement(id));
   return { ok: true };
 }
 

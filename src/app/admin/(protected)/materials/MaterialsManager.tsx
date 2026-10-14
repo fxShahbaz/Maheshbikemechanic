@@ -12,8 +12,11 @@ import {
 import { supabaseBrowser } from "@/lib/supabase/browser";
 import type { StudyMaterial } from "@/lib/types";
 import { ShowMoreButton, usePagination } from "@/components/pagination";
+import { AudienceBadge, AudiencePicker } from "@/components/AudiencePicker";
 
 const BUCKET = "study-materials";
+const CATEGORY_LIST = "material-categories";
+const NEEDS_BATCH = "Pick at least one batch, or choose All students.";
 
 const inputClass =
   "mt-1 w-full bg-white border border-line rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-forest";
@@ -34,8 +37,10 @@ function formatDate(iso: string): string {
 
 export default function MaterialsManager({
   materials,
+  batches,
 }: {
   materials: StudyMaterial[];
+  batches: string[];
 }) {
   const router = useRouter();
   const formRef = useRef<HTMLFormElement>(null);
@@ -46,14 +51,29 @@ export default function MaterialsManager({
   const [editRow, setEditRow] = useState<string | null>(null);
   const [draftTitle, setDraftTitle] = useState("");
   const [draftDescription, setDraftDescription] = useState("");
+  const [draftCategory, setDraftCategory] = useState("");
+  const [draftAudience, setDraftAudience] = useState<string[] | null>(null);
+  const [uploadAudience, setUploadAudience] = useState<string[] | null>(null);
   const [confirmDeleteRow, setConfirmDeleteRow] = useState<string | null>(null);
-  const { paged, remaining, showMore } = usePagination(materials, 12);
+  // null = all files, "" = uncategorised, otherwise a category name
+  const [filter, setFilter] = useState<string | null>(null);
+
+  const categories = Array.from(
+    new Set(materials.map((m) => m.category?.trim()).filter(Boolean) as string[])
+  ).sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+  const hasUncategorised = materials.some((m) => !m.category?.trim());
+  const filtered =
+    filter === null
+      ? materials
+      : materials.filter((m) => (m.category?.trim() || "") === filter);
+  const { paged, remaining, showMore } = usePagination(filtered, 12);
 
   async function handleUpload(formData: FormData) {
     setError(undefined);
     const file = formData.get("file") as File | null;
     const title = String(formData.get("title") ?? "").trim();
     const description = String(formData.get("description") ?? "").trim();
+    const category = String(formData.get("category") ?? "").trim();
 
     if (!file || file.size === 0) {
       setError("Choose a PDF file.");
@@ -65,6 +85,10 @@ export default function MaterialsManager({
     }
     if (!title) {
       setError("Title is required.");
+      return;
+    }
+    if (uploadAudience !== null && uploadAudience.length === 0) {
+      setError(NEEDS_BATCH);
       return;
     }
 
@@ -90,6 +114,8 @@ export default function MaterialsManager({
         description: description || null,
         storage_path: prep.path,
         file_size: file.size,
+        category: category || null,
+        batches: uploadAudience ?? [],
       });
       if (!saved.ok) {
         setError(saved.error);
@@ -97,6 +123,7 @@ export default function MaterialsManager({
       }
 
       formRef.current?.reset();
+      setUploadAudience(null);
       setShowUpload(false);
       router.refresh();
     } finally {
@@ -137,6 +164,36 @@ export default function MaterialsManager({
         )}
       </div>
 
+      <datalist id={CATEGORY_LIST}>
+        {categories.map((c) => (
+          <option key={c} value={c} />
+        ))}
+      </datalist>
+
+      {categories.length > 0 && (
+        <div className="mt-4 flex flex-wrap gap-2">
+          {[
+            { key: null, label: "All" },
+            ...categories.map((c) => ({ key: c, label: c })),
+            ...(hasUncategorised ? [{ key: "", label: "Uncategorised" }] : []),
+          ].map((f) => (
+            <button
+              key={f.key ?? "__all"}
+              type="button"
+              onClick={() => setFilter(f.key)}
+              className={[
+                "px-3.5 py-1.5 rounded-full text-sm border transition",
+                filter === f.key
+                  ? "bg-ink text-white border-ink"
+                  : "bg-white border-line hover:bg-cream",
+              ].join(" ")}
+            >
+              {f.label}
+            </button>
+          ))}
+        </div>
+      )}
+
       {showUpload && (
         <form
           ref={formRef}
@@ -144,7 +201,7 @@ export default function MaterialsManager({
           className="mt-4 bg-white border border-line rounded-3xl p-6"
         >
           <h2 className="font-display text-xl">Upload a PDF</h2>
-          <div className="mt-4 grid gap-4 md:grid-cols-3">
+          <div className="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
             <div>
               <label className="text-sm">Title</label>
               <input
@@ -166,6 +223,16 @@ export default function MaterialsManager({
               />
             </div>
             <div>
+              <label className="text-sm">Category (optional)</label>
+              <input
+                name="category"
+                type="text"
+                list={CATEGORY_LIST}
+                className={inputClass}
+                placeholder="e.g. Engine, Electrical"
+              />
+            </div>
+            <div>
               <label className="text-sm">PDF file</label>
               <input
                 name="file"
@@ -175,6 +242,15 @@ export default function MaterialsManager({
                 className="mt-1 w-full text-sm file:mr-3 file:px-4 file:py-2.5 file:rounded-xl file:border file:border-line file:bg-cream file:text-sm file:font-medium hover:file:bg-cream/70 file:cursor-pointer file:transition"
               />
             </div>
+          </div>
+          <div className="mt-5">
+            <div className="text-sm mb-2">Who can see this file</div>
+            <AudiencePicker
+              batches={batches}
+              value={uploadAudience}
+              onChange={setUploadAudience}
+              disabled={uploading}
+            />
           </div>
           <div className="mt-5 flex items-center gap-3">
             <button
@@ -220,7 +296,11 @@ export default function MaterialsManager({
         </div>
       )}
 
-      {materials.length === 0 ? (
+      {materials.length > 0 && filtered.length === 0 ? (
+        <p className="text-muted text-sm mt-8 text-center bg-white border border-line rounded-2xl px-5 py-10">
+          No files in this category.
+        </p>
+      ) : materials.length === 0 ? (
         <p className="text-muted text-sm mt-8 text-center bg-white border border-line rounded-2xl px-5 py-10">
           No study material uploaded yet. Click &ldquo;+ Add PDF&rdquo; to get
           started.
@@ -251,18 +331,38 @@ export default function MaterialsManager({
                       className="w-full bg-white border border-line rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-forest"
                       placeholder="Description"
                     />
+                    <input
+                      type="text"
+                      list={CATEGORY_LIST}
+                      value={draftCategory}
+                      onChange={(e) => setDraftCategory(e.target.value)}
+                      className="w-full bg-white border border-line rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-forest"
+                      placeholder="Category (optional)"
+                    />
+                    <AudiencePicker
+                      batches={batches}
+                      value={draftAudience}
+                      onChange={setDraftAudience}
+                      disabled={pending}
+                    />
                     <div className="flex gap-2">
                       <button
                         type="button"
                         disabled={pending}
-                        onClick={() =>
+                        onClick={() => {
+                          if (draftAudience !== null && draftAudience.length === 0) {
+                            setError(NEEDS_BATCH);
+                            return;
+                          }
                           run(() =>
                             updateMaterial(m.id, {
                               title: draftTitle,
                               description: draftDescription || null,
+                              category: draftCategory || null,
+                              batches: draftAudience ?? [],
                             })
-                          )
-                        }
+                          );
+                        }}
                         className="px-4 py-1.5 rounded-full text-sm bg-ink text-white hover:bg-forest transition disabled:opacity-60"
                       >
                         Save
@@ -297,7 +397,17 @@ export default function MaterialsManager({
                       </span>
                     </div>
 
-                    <div className="mt-3 font-medium text-[15px] leading-tight">
+                    {m.category && (
+                      <div className="mt-3 text-[11px] uppercase tracking-wider text-forest font-medium">
+                        {m.category}
+                      </div>
+                    )}
+                    <div
+                      className={[
+                        "font-medium text-[15px] leading-tight",
+                        m.category ? "mt-1" : "mt-3",
+                      ].join(" ")}
+                    >
                       {m.title}
                     </div>
                     <div className="text-xs text-muted mt-1">
@@ -308,6 +418,9 @@ export default function MaterialsManager({
                         {m.description}
                       </p>
                     )}
+                    <div className="mt-3">
+                      <AudienceBadge batches={m.batches ?? []} />
+                    </div>
 
                     <div className="mt-4 pt-3 border-t border-line flex items-center gap-1.5 flex-wrap">
                       {confirmingDelete ? (
@@ -344,6 +457,8 @@ export default function MaterialsManager({
                               setEditRow(m.id);
                               setDraftTitle(m.title);
                               setDraftDescription(m.description ?? "");
+                              setDraftCategory(m.category ?? "");
+                              setDraftAudience(m.batches?.length ? m.batches : null);
                             }}
                             className="px-3.5 py-1.5 rounded-full text-xs border border-line hover:bg-cream transition"
                           >

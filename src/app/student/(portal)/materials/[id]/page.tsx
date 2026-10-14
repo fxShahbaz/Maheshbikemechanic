@@ -13,7 +13,7 @@ export default async function MaterialViewerPage({
   const profile = await getStudentProfile();
   if (!profile) return null; // layout guard already redirects
 
-  const material = await getMaterial(id);
+  const material = await getMaterial(profile, id);
   if (!material) notFound();
 
   return (

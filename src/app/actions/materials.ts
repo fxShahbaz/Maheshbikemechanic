@@ -8,6 +8,22 @@ const BUCKET = "study-materials";
 
 type Result = { ok: true } | { ok: false; error: string };
 
+type MaterialMeta = {
+  category?: string | null;
+  /** Target batches; empty = all students. */
+  batches?: string[];
+};
+
+function cleanBatches(batches: string[] | undefined): string[] {
+  return Array.from(
+    new Set((batches ?? []).map((b) => b.trim()).filter(Boolean))
+  );
+}
+
+function cleanCategory(category: string | null | undefined): string | null {
+  return category?.trim().replace(/\s+/g, " ") || null;
+}
+
 function revalidateMaterials() {
   revalidatePath("/admin/materials");
   revalidatePath("/student/materials");
@@ -44,12 +60,14 @@ export async function createMaterialUpload(
   return { ok: true, path: data.path, token: data.token };
 }
 
-export async function addMaterial(input: {
-  title: string;
-  description?: string | null;
-  storage_path: string;
-  file_size?: number | null;
-}): Promise<Result> {
+export async function addMaterial(
+  input: {
+    title: string;
+    description?: string | null;
+    storage_path: string;
+    file_size?: number | null;
+  } & MaterialMeta
+): Promise<Result> {
   await requireAdmin();
 
   const title = input.title?.trim();
@@ -62,6 +80,8 @@ export async function addMaterial(input: {
     description: input.description?.trim() || null,
     storage_path: input.storage_path,
     file_size: input.file_size ?? null,
+    category: cleanCategory(input.category),
+    batches: cleanBatches(input.batches),
   });
   if (error) return { ok: false, error: error.message };
 
@@ -71,7 +91,7 @@ export async function addMaterial(input: {
 
 export async function updateMaterial(
   id: string,
-  input: { title: string; description?: string | null }
+  input: { title: string; description?: string | null } & MaterialMeta
 ): Promise<Result> {
   await requireAdmin();
 
@@ -81,7 +101,12 @@ export async function updateMaterial(
   const supabase = supabaseAdmin();
   const { error } = await supabase
     .from("study_materials")
-    .update({ title, description: input.description?.trim() || null })
+    .update({
+      title,
+      description: input.description?.trim() || null,
+      category: cleanCategory(input.category),
+      batches: cleanBatches(input.batches),
+    })
     .eq("id", id);
   if (error) return { ok: false, error: error.message };
 

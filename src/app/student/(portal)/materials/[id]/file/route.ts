@@ -12,13 +12,11 @@ export async function GET(
   if (!user) return new Response("Unauthorized", { status: 401 });
 
   // Admins may preview; students need active, unexpired access.
-  const admin = isAdminEmail(user.email);
-  if (!admin) {
-    const profile = await getStudentProfile();
-    if (!profile || !hasActiveAccess(profile)) {
-      return new Response("Forbidden", { status: 403 });
-    }
-  }
+  if (isAdminEmail(user.email)) return materialFileResponse(id, "admin");
 
-  return materialFileResponse(id, { includeUnpublished: admin });
+  const profile = await getStudentProfile();
+  if (!profile || !hasActiveAccess(profile)) {
+    return new Response("Forbidden", { status: 403 });
+  }
+  return materialFileResponse(id, profile);
 }

@@ -34,11 +34,13 @@ export async function proxy(request: NextRequest) {
 export const config = {
   matcher: [
     /*
-     * Match all request paths except static files and assets:
+     * Match all request paths except static files, assets and the
+     * Bearer-token API (no cookies to refresh there):
+     * - api/student
      * - _next/static / _next/image
      * - favicon
      * - common image / video extensions
      */
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|mp4|ico)$).*)",
+    "/((?!api/student|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|mp4|ico)$).*)",
   ],
 };

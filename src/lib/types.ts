@@ -188,6 +188,10 @@ export type StudyMaterial = {
   storage_path: string;
   file_size: number | null;
   published: boolean;
+  /** Free-text grouping label; null = uncategorised. */
+  category: string | null;
+  /** Batches allowed to see it; empty = all students. */
+  batches: string[];
 };
 
 export type Announcement = {
@@ -199,6 +203,8 @@ export type Announcement = {
   pinned: boolean;
   /** Target batches; empty = all students. */
   batches: string[];
+  /** When it was pushed to the mobile app; null = not yet. */
+  pushed_at: string | null;
 };
 
 export type Engine = {
@@ -237,7 +243,7 @@ export function formatDuration(ms: number): string {
 export function maskAadhar(aadhar: string | null): string {
   if (!aadhar) return "—";
   const digits = aadhar.replace(/\D/g, "");
-  if (digits.length < 4) return aadhar;
+  if (digits.length < 4) return "XXXX";
   const last4 = digits.slice(-4);
   return `XXXX XXXX ${last4}`;
 }

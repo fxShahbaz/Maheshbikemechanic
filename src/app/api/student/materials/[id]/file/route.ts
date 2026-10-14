@@ -10,5 +10,5 @@ export async function GET(
   if (auth instanceof Response) return auth;
 
   const { id } = await ctx.params;
-  return materialFileResponse(id);
+  return materialFileResponse(id, auth.profile);
 }

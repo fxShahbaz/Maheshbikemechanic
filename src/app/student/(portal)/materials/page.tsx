@@ -1,3 +1,4 @@
+import { getStudentProfile } from "@/lib/auth";
 import { listMaterials } from "@/lib/student-portal";
 import MaterialsGrid from "./MaterialsGrid";
 import { EmptyState, PageHeader } from "../_components/ui";
@@ -5,7 +6,9 @@ import { EmptyState, PageHeader } from "../_components/ui";
 export const dynamic = "force-dynamic";
 
 export default async function MaterialsPage() {
-  const materials = await listMaterials();
+  const profile = await getStudentProfile();
+  if (!profile) return null; // layout guard already redirects
+  const materials = await listMaterials(profile);
 
   return (
     <>
