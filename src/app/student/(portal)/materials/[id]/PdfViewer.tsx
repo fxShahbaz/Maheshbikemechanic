@@ -1,20 +1,30 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { loadPdfBytes } from "@/lib/pdf-cache";
 
 /**
  * Renders the PDF onto canvases via pdf.js — there is no embedded file the
- * browser can "Save as", and the source URL only streams for signed-in,
- * active students. Right-click, print and save shortcuts are blocked and
+ * browser can "Save as", and the source URL only redirects (to a 60s signed URL) for signed-in,
+ * active students. The bytes are kept in Cache Storage after the first
+ * download (see lib/pdf-cache). Right-click, print and save shortcuts are blocked and
  * every page carries the student's watermark. (True screenshot prevention
  * isn't possible on the web; the watermark makes leaks traceable.)
  */
 export default function PdfViewer({
   fileUrl,
   watermark,
+  ownerId,
+  materialId,
+  storagePath,
 }: {
   fileUrl: string;
   watermark: string;
+  /** Scopes the browser cache to the signed-in student. */
+  ownerId: string;
+  materialId: string;
+  /** Changes when the file is replaced, invalidating the cached copy. */
+  storagePath: string;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [state, setState] = useState<"loading" | "ready" | "error">("loading");
@@ -34,7 +44,11 @@ export default function PdfViewer({
           import.meta.url
         ).toString();
 
-        const doc = await pdfjs.getDocument({ url: fileUrl }).promise;
+        // Downloaded once (fileUrl redirects to a 60s signed Storage URL),
+        // then served from the browser's cache on later opens.
+        const bytes = await loadPdfBytes(fileUrl, ownerId, materialId, storagePath);
+        if (cancelled) return;
+        const doc = await pdfjs.getDocument({ data: new Uint8Array(bytes) }).promise;
         if (cancelled) return;
         setPageCount(doc.numPages);
 
@@ -75,7 +89,7 @@ export default function PdfViewer({
     return () => {
       cancelled = true;
     };
-  }, [fileUrl]);
+  }, [fileUrl, ownerId, materialId, storagePath]);
 
   // Deterrents: no right-click, no save/print shortcuts, no printing
   useEffect(() => {

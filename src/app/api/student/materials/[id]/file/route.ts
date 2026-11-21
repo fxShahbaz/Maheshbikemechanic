@@ -1,7 +1,7 @@
 import { materialFileResponse } from "@/lib/student-portal";
 import { authenticateActiveStudent } from "@/lib/student-api";
 
-/** Streams the PDF to the app's in-app viewer. */
+/** Redirects the (older) app to a short-lived signed URL for the PDF. */
 export async function GET(
   request: Request,
   ctx: RouteContext<"/api/student/materials/[id]/file">

@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { redirect } from "next/navigation";
 import { getAuthUser, getStudentProfile } from "@/lib/auth";
 import { hasActiveAccess, isAdminEmail } from "@/lib/types";
-import { signOutStudent } from "@/app/actions/student-auth";
+import StudentSignOutForm from "@/components/StudentSignOutForm";
 import { accessLock } from "@/lib/student-portal";
 import StudentShell from "./StudentShell";
 
@@ -61,11 +61,11 @@ export default async function StudentPortalLayout({
               {profile.email}
             </code>
           </p>
-          <form action={signOutStudent} className="mt-6">
+          <StudentSignOutForm className="mt-6">
             <button type="submit" className="pill-btn">
               Sign out
             </button>
-          </form>
+          </StudentSignOutForm>
         </div>
       </main>
     );

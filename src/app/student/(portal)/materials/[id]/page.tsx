@@ -39,6 +39,9 @@ export default async function MaterialViewerPage({
       <PdfViewer
         fileUrl={`/student/materials/${material.id}/file`}
         watermark={`${profile.name} · ${profile.email}`}
+        ownerId={profile.id}
+        materialId={material.id}
+        storagePath={material.storage_path}
       />
     </>
   );

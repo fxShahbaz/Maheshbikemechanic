@@ -1,6 +1,6 @@
 import { getStudentProfile } from "@/lib/auth";
 import { getProfileDetails } from "@/lib/student-portal";
-import { signOutStudent } from "@/app/actions/student-auth";
+import StudentSignOutForm from "@/components/StudentSignOutForm";
 import { Group, InfoRow, SectionLabel } from "../_components/ui";
 import {
   formatINR,
@@ -156,14 +156,14 @@ export default async function ProfilePage() {
         <InfoRow label="Created" value={formatDate(profile.created_at)} />
       </Group>
 
-      <form action={signOutStudent} className="mt-6">
+      <StudentSignOutForm className="mt-6">
         <button
           type="submit"
           className="w-full h-12 rounded-2xl bg-white border border-line text-[15px] font-semibold text-red-600 active:bg-red-50 transition"
         >
           Sign out
         </button>
-      </form>
+      </StudentSignOutForm>
     </>
   );
 }

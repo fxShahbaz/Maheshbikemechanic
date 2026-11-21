@@ -268,7 +268,7 @@ export async function getMaterial(
 }
 
 /**
- * Streams a material's PDF; never cached, inline only. Admins see every
+ * Redirects to a short-lived signed URL for a material's PDF. Admins see every
  * file; a student only published files their batch may access.
  */
 export async function materialFileResponse(
@@ -291,22 +291,27 @@ export async function materialFileResponse(
     return new Response("Not found", { status: 404 });
   }
 
-  const { data: blob, error } = await supabase.storage
+  // Redirect to a short-lived signed URL instead of streaming the bytes
+  // through this function: PDFs proxied via Vercel count against the Hobby
+  // plan's Fast Origin Transfer limit. Access was checked above; the URL
+  // expires almost immediately, so it can't usefully be shared.
+  const { data: signed, error } = await supabase.storage
     .from(MATERIALS_BUCKET)
-    .download(material.storage_path);
-  if (error || !blob) return new Response("Not found", { status: 404 });
+    .createSignedUrl(material.storage_path, SIGNED_URL_TTL_SECONDS);
+  if (error || !signed) return new Response("Not found", { status: 404 });
 
-  return new Response(blob.stream(), {
+  return new Response(null, {
+    status: 302,
     headers: {
-      "Content-Type": "application/pdf",
-      "Content-Length": String(blob.size),
-      // inline + no-store: viewable in the app, never cached to disk
-      "Content-Disposition": "inline",
+      Location: signed.signedUrl,
       "Cache-Control": "private, no-store",
       "X-Robots-Tag": "noindex",
     },
   });
 }
+
+/** Long enough for the viewer to start the download, too short to share. */
+const SIGNED_URL_TTL_SECONDS = 60;
 
 // ============== Updates ==============
 
