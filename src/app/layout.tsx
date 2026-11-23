@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Fraunces, Noto_Sans_Devanagari } from "next/font/google";
+import { Inter, Noto_Sans_Devanagari } from "next/font/google";
+import localFont from "next/font/local";
 import ScrollProgress from "@/components/animations/ScrollProgress";
 import SmoothScroll from "@/components/SmoothScroll";
 import { EnquiryDialogProvider } from "@/components/EnquiryDialog";
@@ -15,11 +16,13 @@ const inter = Inter({
   display: "swap",
 });
 
-const fraunces = Fraunces({
+// Self-hosted (Fraunces variable, latin subset, wght 400–600) — the
+// next/font/google loader for Fraunces fails on Vercel's Turbopack build.
+const fraunces = localFont({
+  src: "./fonts/Fraunces-latin-wght.woff2",
   variable: "--font-fraunces",
-  subsets: ["latin"],
   display: "swap",
-  weight: ["400", "500", "600"],
+  weight: "400 600",
 });
 
 const devanagari = Noto_Sans_Devanagari({
